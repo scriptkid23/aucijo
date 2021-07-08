@@ -2,9 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './app/App';
 import reportWebVitals from './reportWebVitals';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import "./assets/scss/black-dashboard-react.scss";
-import "./assets/demo/demo.css";
+import "./assets/css/black-dashboard-react.min.css";
 import "./assets/css/nucleo-icons.css";
 
 ReactDOM.render(
