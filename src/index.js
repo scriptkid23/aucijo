@@ -4,7 +4,7 @@ import App from './app/App';
 import reportWebVitals from './reportWebVitals';
 import "./assets/css/black-dashboard-react.min.css";
 import "./assets/css/nucleo-icons.css";
-
+import './index.css';
 ReactDOM.render(
   <React.StrictMode>
     <App />

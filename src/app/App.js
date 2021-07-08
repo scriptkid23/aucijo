@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import AuthenticationLayout from "../layouts/authentication.layout";
 import HomeLayout from "../layouts/home.layout";
 import ThemeContextWrapper from "../components/theme-wrapper/theme.wrapper";
@@ -18,7 +18,13 @@ export default class App extends Component {
               />
               <Route
                 exact
-                path={["/", "/home", "/home/:sub"]}
+                path={[
+                  "/",
+                  "/home",
+                  "/home/:sub",
+                  "/home/acution/:id",
+                  "/home/dashboard/:sub",
+                ]}
                 render={(props) => <HomeLayout {...props} />}
               />
             </Switch>

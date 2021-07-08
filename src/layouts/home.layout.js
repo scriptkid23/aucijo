@@ -5,7 +5,8 @@ import { getRoutes } from "../helper/utils";
 import { HomeRoute } from "../router/router";
 import Sidebar from "../components/sidebar.component";
 import AdminNavbar from "../components/admin-navbar.component";
-import { Switch, Redirect, useLocation} from "react-router-dom";
+import logo from '../assets/img/spirity-logo.png';
+import { Switch, Redirect, useLocation } from "react-router-dom";
 
 var ps;
 export default function HomeLayout(props) {
@@ -53,21 +54,35 @@ export default function HomeLayout(props) {
     document.documentElement.classList.toggle("nav-open");
     setsidebarOpened(!sidebarOpened);
   };
+  const getBrandText = (path) => {
+    for (let i = 0; i < HomeRoute.length; i++) {
+      if (location.pathname.indexOf(HomeRoute[i].path) !== -1) {
+        return HomeRoute[i].name;
+      }
+    }
+    return "Brand";
+  };
   return (
     <BackgroundColorContext.Consumer>
       {({ color, changeColor }) => (
         <React.Fragment>
           <div className="wrapper">
-            <Sidebar toggleSidebar={toggleSidebar} />
+            <Sidebar
+              toggleSidebar={toggleSidebar}
+              logo={{
+                outterLink: "https://www.creative-tim.com/",
+                text: "Spirity",
+                imgSrc: logo,
+              }}
+            />
             <div className="main-panel" ref={mainPanelRef} data={color}>
               <AdminNavbar
-                brandText={"Dashboard"}
+                brandText={getBrandText(location.pathname)}
                 toggleSidebar={toggleSidebar}
                 sidebarOpened={sidebarOpened}
               />
               <Switch>
                 {getRoutes(HomeRoute)}
-                {/* <Redirect from="*" to="/dashboard"/> */}
               </Switch>
             </div>
           </div>
