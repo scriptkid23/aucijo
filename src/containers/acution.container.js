@@ -1,6 +1,8 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 import { Col, Row, Card, CardHeader, CardBody, Button } from "reactstrap";
 export default function AcutionContainer() {
+  const history = useHistory();
   return (
     <div className="content">
       <Row>
@@ -24,7 +26,7 @@ export default function AcutionContainer() {
                     <i className="tim-icons icon-tag" />
                     <p>ID: 123<br/>Triumph Street Twin</p>
                     
-                    <Button>Join</Button>
+                    <Button onClick={() => history.push(`/home/acution/${'123'}`)}>Join</Button>
                   </div>
                 </Col>
               </Row>

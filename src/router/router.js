@@ -3,6 +3,7 @@ import AcutionContainer from "../containers/acution.container";
 import DashboardContainer from "../containers/dashboard.container";
 import ItemsDetailContainer from "../containers/items-detail.container";
 import LoginContainer from "../containers/login.container";
+import ProfileContainer from "../containers/profile.container";
 import RegisterContainer from "../containers/register.container";
 import Tables from "../containers/test.container";
 
@@ -43,6 +44,12 @@ export const HomeRoute = [
     name: "acution",
     icon: "tim-icons icon-cart",
     component: ItemsDetailContainer,
+  },
+  {
+    path: "/home/profile",
+    name: "profile",
+    icon: "tim-icons icon-cart",
+    component: ProfileContainer,
   },
   {
     path: "/home/test",

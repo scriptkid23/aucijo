@@ -34,7 +34,7 @@ export default function DashboardContainer() {
               </CardTitle>
             </CardHeader>
             <CardBody>
-              <Link to="/home/test">Show more</Link>
+              <Link to="/home/dashboard/items">Show more</Link>
             </CardBody>
           </Card>
         </Col>

@@ -1,4 +1,3 @@
-
 import React from "react";
 import classNames from "classnames";
 
@@ -21,11 +20,13 @@ import {
   NavbarToggler,
   ModalHeader,
 } from "reactstrap";
+import { useHistory } from "react-router-dom";
 
 function AdminNavbar(props) {
   const [collapseOpen, setcollapseOpen] = React.useState(false);
   const [modalSearch, setmodalSearch] = React.useState(false);
   const [color, setcolor] = React.useState("navbar-transparent");
+  const history = useHistory();
   React.useEffect(() => {
     window.addEventListener("resize", updateColor);
     // Specify how to clean up after this effect:
@@ -136,7 +137,7 @@ function AdminNavbar(props) {
                   <div className="photo">
                     <img
                       alt="..."
-                      src={require("../assets/img/anime3.png").default}
+                      src={require("../assets/img/avatar-1.png").default}
                     />
                   </div>
                   <b className="caret d-none d-lg-block d-xl-block" />
@@ -144,7 +145,12 @@ function AdminNavbar(props) {
                 </DropdownToggle>
                 <DropdownMenu className="dropdown-navbar" right tag="ul">
                   <NavLink tag="li">
-                    <DropdownItem className="nav-item">Profile</DropdownItem>
+                    <DropdownItem
+                      className="nav-item"
+                      onClick={() => history.push('/home/profile')}
+                    >
+                      Profile
+                    </DropdownItem>
                   </NavLink>
                   <NavLink tag="li">
                     <DropdownItem className="nav-item">Settings</DropdownItem>
