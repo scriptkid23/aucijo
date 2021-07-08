@@ -6,7 +6,7 @@ function getRoutes(route) {
       <Route
         exact
         path={prop.path}
-        component={props => <prop.component {...props} />}
+        component={prop.component}
         key={key}
       />
     )
