@@ -1,3 +1,6 @@
 .pointer {
     cursor: pointer;
 }
+.search-header > .modal-title {
+    width: 100%;
+}

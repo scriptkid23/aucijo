@@ -172,11 +172,12 @@ function AdminNavbar(props) {
         isOpen={modalSearch}
         toggle={toggleModalSearch}
       >
-        <ModalHeader>
-          <Input placeholder="SEARCH" type="text" />
+        <ModalHeader className='search-header'>
+          <Input className='w-100 font-weight-normal' placeholder="Search acution..." type="text"/>
           <button
             aria-label="Close"
             className="close"
+
             onClick={toggleModalSearch}
           >
             <i className="tim-icons icon-simple-remove" />
