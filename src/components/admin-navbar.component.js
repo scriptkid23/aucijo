@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import classNames from "classnames";
 
 // reactstrap components
@@ -21,11 +21,13 @@ import {
   ModalHeader,
 } from "reactstrap";
 import { useHistory } from "react-router-dom";
+import { ThemeContext, themes } from "../context/theme.context";
 
 function AdminNavbar(props) {
   const [collapseOpen, setcollapseOpen] = React.useState(false);
   const [modalSearch, setmodalSearch] = React.useState(false);
   const [color, setcolor] = React.useState("navbar-transparent");
+  const {changeTheme} = useContext(ThemeContext);
   const history = useHistory();
   React.useEffect(() => {
     window.addEventListener("resize", updateColor);
@@ -55,6 +57,9 @@ function AdminNavbar(props) {
   const toggleModalSearch = () => {
     setmodalSearch(!modalSearch);
   };
+  const toggleTheme = () => {
+    changeTheme(themes.light);
+  }
   return (
     <>
       <Navbar className={classNames("navbar-absolute", color)} expand="lg">
@@ -153,7 +158,7 @@ function AdminNavbar(props) {
                     </DropdownItem>
                   </NavLink>
                   <NavLink tag="li">
-                    <DropdownItem className="nav-item">Settings</DropdownItem>
+                    <DropdownItem className="nav-item" onClick={toggleTheme}>Light theme</DropdownItem>
                   </NavLink>
                 </DropdownMenu>
               </UncontrolledDropdown>
