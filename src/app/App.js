@@ -11,12 +11,12 @@ export default class App extends Component {
           <Route
             exact
             path={["/login", "/register"]}
-            component={AuthenticationLayout}
+            render={(props) => <AuthenticationLayout {...props} />}
           />
           <Route
             exact
             path={["/", "/home", "/home/:sub"]}
-            component={HomeLayout}
+            render={(props) => <HomeLayout {...props} />}
           />
         </Switch>
       </BrowserRouter>
