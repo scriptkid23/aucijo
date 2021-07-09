@@ -26,7 +26,7 @@ export default function AcutionContainer() {
                     <i className="tim-icons icon-tag" />
                     <p>ID: 123<br/>Triumph Street Twin</p>
                     
-                    <Button onClick={() => history.push(`/home/acution/${'123'}`)}>Join</Button>
+                    <Button onClick={() => history.push(`/home/auction/${'123'}`)}>Join</Button>
                   </div>
                 </Col>
               </Row>

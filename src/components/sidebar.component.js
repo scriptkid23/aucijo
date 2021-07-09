@@ -85,15 +85,15 @@ function Sidebar(props) {
                   <p>Dashboard</p>
                 </NavLink>
               </li>
-              <li className={activeRoute("/home/acution")}>
+              <li className={activeRoute("/home/auction")}>
                 <NavLink
-                  to={"/home/acution"}
+                  to={"/home/auction"}
                   className="nav-link"
                   activeClassName="active"
                   onClick={props.toggleSidebar}
                 >
                   <i className={"tim-icons icon-cart"} />
-                  <p>acution</p>
+                  <p>auction</p>
                 </NavLink>
               </li>
             </Nav>

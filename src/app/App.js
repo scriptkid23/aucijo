@@ -22,7 +22,7 @@ export default class App extends Component {
                   "/",
                   "/home",
                   "/home/:sub",
-                  "/home/acution/:id",
+                  "/home/auction/:id",
                   "/home/dashboard/:sub",
                 ]}
                 render={(props) => <HomeLayout {...props} />}

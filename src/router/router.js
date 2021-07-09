@@ -1,5 +1,5 @@
-import AcutionDetail from "../containers/acution-detail.container";
-import AcutionContainer from "../containers/acution.container";
+import AcutionDetail from "../containers/auction-detail.container";
+import AcutionContainer from "../containers/auction.container";
 import DashboardContainer from "../containers/dashboard.container";
 import ItemsDetailContainer from "../containers/items-detail.container";
 import LoginContainer from "../containers/login.container";
@@ -28,20 +28,20 @@ export const HomeRoute = [
     component: DashboardContainer,
   },
   {
-    path: "/home/acution",
-    name: "acution",
+    path: "/home/auction",
+    name: "auction",
     icon: "tim-icons icon-cart",
     component: AcutionContainer,
   },
   {
-    path: "/home/acution/:id",
-    name: "acution",
+    path: "/home/auction/:id",
+    name: "auction",
     icon: "tim-icons icon-cart",
     component: AcutionDetail,
   },
   {
     path: "/home/dashboard/items",
-    name: "acution",
+    name: "auction",
     icon: "tim-icons icon-cart",
     component: ItemsDetailContainer,
   },

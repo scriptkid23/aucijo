@@ -173,7 +173,7 @@ function AdminNavbar(props) {
         toggle={toggleModalSearch}
       >
         <ModalHeader className='search-header'>
-          <Input className='w-100 font-weight-normal' placeholder="Search acution..." type="text"/>
+          <Input className='w-100 font-weight-normal' placeholder="Search auction..." type="text"/>
           <button
             aria-label="Close"
             className="close"
