@@ -28,11 +28,13 @@
   -ms-transform: translate(-50%, -50%);
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
-  text-align: center;
   color: #ffffff;
   padding: 0 15px;
   width: 100%;
   max-width: 880px;
+}
+.login-form {
+  text-align: center;
 }
 .login-form-header h1 {
   font-weight: 600;
@@ -127,4 +129,7 @@
   100% {
     transform: translateX(-10px);
   }
+}
+.register-form {
+  width: 40%;
 }

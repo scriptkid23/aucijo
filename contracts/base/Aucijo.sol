@@ -29,13 +29,14 @@ contract Aucijo is ERC20 {
         require(registered[msg.sender], 'Member was not registered!');
         _;
     }
-    function registerMember(string memory firstname, string memory lastname, string memory email, string memory _address) public {
+    function registerMember(string memory firstname, string memory lastname, string memory email, string memory _address, string memory phonenumber) public {
         require(!registered[msg.sender],'Member was registered!');
         Member storage member = members[msg.sender];
         member.firstname = firstname;
         member.lastname = lastname;
         member.email = email;
         member._address = _address;
+        member.phonenumber = phonenumber;
         registered[msg.sender] = true;
         _memberId.increment();
     }
