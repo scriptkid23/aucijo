@@ -14,19 +14,21 @@ import { useForm } from "react-hook-form";
 import WrapperLoadingComponent from "../components/wrapper-loading.component";
 import { GAS } from "../helper/constant";
 import WrapperDrizzleComponent from "../components/wrapper-drizzle.component";
+import { useHistory } from "react-router-dom";
+import { compose } from "redux";
+import WrapperAlertComponent from "../components/wrapper-alert.component";
 
-function RegisterContainer({ methods, owner }) {
+function RegisterContainer({ methods, owner, setAlert }) {
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm();
+  const history = useHistory();
   const onSubmit = async (data) => {
-    console.log(methods);
-    console.log(owner);
     try {
-      methods
+      await methods
         .registerMember(
           data.first_name,
           data.last_name,
@@ -38,8 +40,10 @@ function RegisterContainer({ methods, owner }) {
           from: owner,
           gas: GAS,
         });
+      history.push('/home/dashboard');
     } catch (error) {
-      console.log(error)
+      // console.log(setAlert)
+      setAlert("danger",error.message);
     }
   };
   return (
@@ -141,6 +145,7 @@ function RegisterContainer({ methods, owner }) {
                       </Row>
                       <Button
                         color="primary"
+                        onClick={onSubmit}
                         disabled={
                           Object.keys(errors).length !== 0 ? true : false
                         }
@@ -158,4 +163,8 @@ function RegisterContainer({ methods, owner }) {
     </div>
   );
 }
-export default WrapperDrizzleComponent(RegisterContainer);
+export default compose(
+  WrapperDrizzleComponent,
+  WrapperAlertComponent,
+)(RegisterContainer);
+
