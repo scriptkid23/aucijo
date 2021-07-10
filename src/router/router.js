@@ -1,5 +1,5 @@
-import AcutionDetail from "../containers/auction-detail.container";
-import AcutionContainer from "../containers/auction.container";
+import AuctionDetail from "../containers/auction-detail.container";
+import AuctionContainer from "../containers/auction.container";
 import DashboardContainer from "../containers/dashboard.container";
 import ItemsDetailContainer from "../containers/items-detail.container";
 import LoginContainer from "../containers/login.container";
@@ -31,13 +31,13 @@ export const HomeRoute = [
     path: "/home/auction",
     name: "auction",
     icon: "tim-icons icon-cart",
-    component: AcutionContainer,
+    component: AuctionContainer,
   },
   {
     path: "/home/auction/:id",
     name: "auction",
     icon: "tim-icons icon-cart",
-    component: AcutionDetail,
+    component: AuctionDetail,
   },
   {
     path: "/home/dashboard/items",
