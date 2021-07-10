@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import {
   BackgroundColorContext,
   backgroundColors,
-} from "../../context/background.color.context";
+} from "../../context/background-color.context";
 
 export default function BackgroundColorWrapper(props) {
   const [color, setColor] = useState(backgroundColors.blue);

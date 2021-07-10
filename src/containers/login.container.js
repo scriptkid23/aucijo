@@ -1,19 +1,26 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
+import { compose } from "redux";
 import MetamaskButton from "../components/metamask-button.component";
+import WrapperDrizzleComponent from "../components/wrapper-drizzle.component";
 import WrapperLoadingComponent from "../components/wrapper-loading.component";
 
 
-function LoginContainer({setLoading, isLoading}) {
+function LoginContainer({setLoading, isLoading, methods}) {
   const history = useHistory();
   const onLogin = async() => {
     setLoading({flag: true, title:'Waiting connect to Metamask'});
     try {
         const data = await window.ethereum.request({ method: 'eth_requestAccounts' })
         if(data){
-          localStorage.setItem("address",data[0]);
+          console.log(methods)
+          const flag = await methods.wasRegistered().call({from:data[0]});
           setLoading({flag: false, title:''});
-          history.push('/home/dashboard');
+          if(!flag) history.push('/register');
+          else {
+            history.push('/home/dashboard');
+            localStorage.setItem("address",data[0]);
+          }
         }
     } catch (error) {
       setLoading({flag: false, title:''});
@@ -65,4 +72,7 @@ function LoginContainer({setLoading, isLoading}) {
     </div>
   );
 }
-export default WrapperLoadingComponent(LoginContainer);
+export default compose(
+  WrapperDrizzleComponent,
+  WrapperLoadingComponent,
+)(LoginContainer)

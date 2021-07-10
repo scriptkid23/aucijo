@@ -6,7 +6,7 @@ import { Nav } from "reactstrap";
 import {
   BackgroundColorContext,
   backgroundColors,
-} from "../context/background.color.context";
+} from "../context/background-color.context";
 import { HomeRoute } from "../router/router";
 
 function Sidebar(props) {

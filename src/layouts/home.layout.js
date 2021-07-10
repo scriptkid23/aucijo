@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BackgroundColorContext } from "../context/background.color.context";
+import { BackgroundColorContext } from "../context/background-color.context";
 import PerfectScrollbar from "perfect-scrollbar";
 import { getRoutes } from "../helper/utils";
 import { HomeRoute } from "../router/router";
@@ -7,9 +7,10 @@ import Sidebar from "../components/sidebar.component";
 import AdminNavbar from "../components/admin-navbar.component";
 import logo from '../assets/img/spirity-logo.png';
 import { Switch, Redirect, useLocation, useHistory } from "react-router-dom";
+import WrapperDrizzleComponent from "../components/wrapper-drizzle.component";
 
 var ps;
-export default function HomeLayout(props) {
+function HomeLayout(props) {
   const location = useLocation();
   const history = useHistory();
   const mainPanelRef = React.useRef(null);
@@ -63,7 +64,12 @@ export default function HomeLayout(props) {
     }
     return "Brand";
   };
+  // const checkRegistered = async () => {
+  //   const flag = await props.methods.wasRegistered().call({from:props.owner});
+  //   if(!flag) history.push('/register');
+  // }
   React.useEffect(() => {
+    // checkRegistered();
     window.ethereum.on("accountsChanged", (data) => {
       if(data.length === 0){
         localStorage.clear();
@@ -103,3 +109,4 @@ export default function HomeLayout(props) {
     </BackgroundColorContext.Consumer>
   );
 }
+export default WrapperDrizzleComponent(HomeLayout);
