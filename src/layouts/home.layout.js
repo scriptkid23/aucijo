@@ -6,11 +6,12 @@ import { HomeRoute } from "../router/router";
 import Sidebar from "../components/sidebar.component";
 import AdminNavbar from "../components/admin-navbar.component";
 import logo from '../assets/img/spirity-logo.png';
-import { Switch, Redirect, useLocation } from "react-router-dom";
+import { Switch, Redirect, useLocation, useHistory } from "react-router-dom";
 
 var ps;
 export default function HomeLayout(props) {
   const location = useLocation();
+  const history = useHistory();
   const mainPanelRef = React.useRef(null);
   const [sidebarOpened, setsidebarOpened] = React.useState(
     document.documentElement.className.indexOf("nav-open") !== -1
@@ -62,6 +63,17 @@ export default function HomeLayout(props) {
     }
     return "Brand";
   };
+  React.useEffect(() => {
+    window.ethereum.on("accountsChanged", (data) => {
+      if(data.length === 0){
+        localStorage.clear();
+        history.push("/login")
+      }
+      else{
+        localStorage.setItem("address",data[0])
+      }
+    });
+  },[])
   return (
     <BackgroundColorContext.Consumer>
       {({ color, changeColor }) => (

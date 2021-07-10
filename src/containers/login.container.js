@@ -1,9 +1,25 @@
 import React from "react";
-import { Button, Card, CardBody } from "reactstrap";
+import { useHistory } from "react-router-dom";
 import MetamaskButton from "../components/metamask-button.component";
+import WrapperLoadingComponent from "../components/wrapper-loading.component";
 
 
-export default function LoginContainer() {
+function LoginContainer({setLoading, isLoading}) {
+  const history = useHistory();
+  const onLogin = async() => {
+    setLoading({flag: true, title:'Waiting connect to Metamask'});
+    try {
+        const data = await window.ethereum.request({ method: 'eth_requestAccounts' })
+        if(data){
+          localStorage.setItem("address",data[0]);
+          setLoading({flag: false, title:''});
+          history.push('/home/dashboard');
+        }
+    } catch (error) {
+      setLoading({flag: false, title:''});
+    }
+    
+  }
   return (
     <div className="index-page">
       <nav
@@ -33,19 +49,20 @@ export default function LoginContainer() {
           <div className="squares square6"></div>
           <div className="squares square7"></div>
           <div className="container h-100">
-          <div className="content-center login-form">
+          {!isLoading && <div className="content-center login-form">
             <div className='login-form-header mb-2'>
               <h1 className='mb-1'>Welcome to the <span className="text-danger">aucijo</span></h1>
               <span>Please login with metamask to using service</span>
             </div>
             <div>
-              <MetamaskButton/>
+              <MetamaskButton onClick={onLogin}/>
             </div>
               
-          </div>
+          </div>}
           </div>
         </div>
       </div>
     </div>
   );
 }
+export default WrapperLoadingComponent(LoginContainer);

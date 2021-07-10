@@ -9,8 +9,8 @@ contract Aucijo is ERC20 {
     constructor() ERC20("Spirity Token", "SPT") {
         _mint(msg.sender, 0);
     }
-    
-    address private StoreToken = 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4;
+    // address deploy smart contract and hold token in auction
+    address private StoreToken = 0xaefdf92622C243a246eC10AD9e1b218F0a0EF0C3;
     
     using Counters for Counters.Counter;
     using Array for Item[];

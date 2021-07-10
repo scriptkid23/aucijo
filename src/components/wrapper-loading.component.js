@@ -26,6 +26,7 @@ const WrapperLoadingComponent = (OriginalComponent) => {
             backdrop={this.state.backdrop}
           />
           <OriginalComponent
+            isLoading = {this.state.isLoading}
             setLoading={this.setLoading}
             {...this.props}
           />
