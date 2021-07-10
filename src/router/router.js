@@ -1,7 +1,7 @@
 import AuctionDetail from "../containers/auction-detail.container";
 import AuctionContainer from "../containers/auction.container";
 import DashboardContainer from "../containers/dashboard.container";
-import ItemsDetailContainer from "../containers/items-detail.container";
+import ListItemsContainer from "../containers/list-items.container";
 import LoginContainer from "../containers/login.container";
 import ProfileContainer from "../containers/profile.container";
 import RegisterContainer from "../containers/register.container";
@@ -43,7 +43,7 @@ export const HomeRoute = [
     path: "/home/dashboard/items",
     name: "auction",
     icon: "tim-icons icon-cart",
-    component: ItemsDetailContainer,
+    component: ListItemsContainer,
   },
   {
     path: "/home/profile",
