@@ -40,10 +40,9 @@ function RegisterContainer({ methods, owner, setAlert }) {
           from: owner,
           gas: GAS,
         });
-      history.push('/home/dashboard');
+      history.push("/home/dashboard");
     } catch (error) {
-      // console.log(setAlert)
-      setAlert("danger",error.message);
+      setAlert("danger", error.message);
     }
   };
   return (
@@ -145,7 +144,6 @@ function RegisterContainer({ methods, owner, setAlert }) {
                       </Row>
                       <Button
                         color="primary"
-                        onClick={onSubmit}
                         disabled={
                           Object.keys(errors).length !== 0 ? true : false
                         }
@@ -165,6 +163,5 @@ function RegisterContainer({ methods, owner, setAlert }) {
 }
 export default compose(
   WrapperDrizzleComponent,
-  WrapperAlertComponent,
+  WrapperAlertComponent
 )(RegisterContainer);
-
