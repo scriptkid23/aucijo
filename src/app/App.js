@@ -15,7 +15,7 @@ export default class App extends Component {
               <Route
                 exact
                 path={["/login", "/register"]}
-                render={(props) => <AuthenticationLayout {...props} />}
+                component={AuthenticationLayout}
               />
               <AuthenticatedGuard
                 exact
@@ -26,7 +26,7 @@ export default class App extends Component {
                   "/home/auction/:id",
                   "/home/dashboard/:sub",
                 ]}
-                render={(props) => <HomeLayout {...props} />}
+                component={HomeLayout}
               />
             </Switch>
           </BrowserRouter>

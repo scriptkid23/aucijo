@@ -70,7 +70,7 @@ export default function HomeLayout(props) {
             <Sidebar
               toggleSidebar={toggleSidebar}
               logo={{
-                outterLink: "https://www.creative-tim.com/",
+                outterLink: "https://google.com",
                 text: "Spirity",
                 imgSrc: logo,
               }}

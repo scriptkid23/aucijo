@@ -6,10 +6,11 @@ function getRoutes(route) {
       <Route
         exact
         path={prop.path}
-        component={prop.component}
+        component={props => <prop.component {...props} />}
         key={key}
       />
     )
   })
 }
 export { getRoutes }
+

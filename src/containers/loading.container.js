@@ -44,7 +44,7 @@ const LoadingContainer = ({ web3, accounts, initialized, children }) => {
     }
   }
 
-  return <LoadingComponent/>;
+  return <LoadingComponent title={'Loading connect to ganache'}/>;
 };
 
 const mapStateToProps = (state) => {
