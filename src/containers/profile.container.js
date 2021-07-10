@@ -105,8 +105,8 @@ function ProfileContainer() {
                     </Col>
                     <Col className="pl-md-1" md="4">
                       <FormGroup>
-                        <label>Postal Code</label>
-                        <Input placeholder="ZIP Code" type="number" />
+                        <label>Phone number</label>
+                        <Input placeholder="0975164536" type="tel" />
                       </FormGroup>
                     </Col>
                   </Row>

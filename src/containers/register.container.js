@@ -13,10 +13,27 @@ import {
   InputGroupAddon,
   FormGroup,
   Form,
+  Alert,
+  FormFeedback,
+  FormText,
+  Spinner,
 } from "reactstrap";
-import MetamaskButton from "../components/metamask-button.component";
+import { useForm } from "react-hook-form";
+
 
 export default function RegisterContainer() {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+  const [loading, setLoading] = React.useState(false);
+
+  const onSubmit = async (data) => {
+    console.log(data);
+  };
+  console.log(errors);
   return (
     <div className="index-page">
       <nav className="navbar navbar-expand-lg fixed-top navbar-transparent">
@@ -48,23 +65,29 @@ export default function RegisterContainer() {
             <div className="content-center register-form">
               <Card>
                 <CardBody>
-                  <CardText>
+                  <Alert className="mb-3">
                     Because you are a newbie, so you should register information
-                    owner before using service
-                  </CardText>
+                    owner before using service.
+                  </Alert>
                   <div className="container">
-                    <Form>
+                    <Form onSubmit={handleSubmit(onSubmit)}>
                       <Row>
                         <Col md={6}>
                           <FormGroup>
-                            <label>Firstname</label>
-                            <Input placeholder="Type your first name" />
+                            <label>First name</label>
+                            <Input
+                              placeholder="Type your first name"
+                              {...register("first_name", { required: true })}
+                            />
                           </FormGroup>
                         </Col>
                         <Col md={6}>
                           <FormGroup>
-                            <label>Lastname</label>
-                            <Input placeholder="Type your last name"/>
+                            <label>Last name</label>
+                            <Input
+                              placeholder="Type your last name"
+                              {...register("last_name", { required: true })}
+                            />
                           </FormGroup>
                         </Col>
                       </Row>
@@ -72,7 +95,10 @@ export default function RegisterContainer() {
                         <Col>
                           <FormGroup>
                             <label>Email</label>
-                            <Input placeholder="your@gmail.com"/>
+                            <Input
+                              placeholder="your@gmail.com"
+                              {...register("email", { required: true, pattern: /\S+@\S+\.\S+/ })}
+                            />
                           </FormGroup>
                         </Col>
                       </Row>
@@ -80,11 +106,34 @@ export default function RegisterContainer() {
                         <Col>
                           <FormGroup>
                             <label>Address</label>
-                            <Input placeholder="your@gmail.com"/>
+                            <Input
+                              placeholder="3973 Drainer Avenue, Tallahassee, Florida"
+                              {...register("address", { required: true })}
+                            />
                           </FormGroup>
                         </Col>
                       </Row>
-
+                      <Row>
+                        <Col>
+                          <FormGroup>
+                            <label>Phone number</label>
+                            <Input
+                              placeholder="0975164536"
+                              type="tel"
+                              {...register("phone_number", { required: true, pattern:/^\d+$/ })}
+                            />
+                          </FormGroup>
+                        </Col>
+                      </Row>
+                      <Button
+                        color="primary"
+                        disabled={
+                          Object.keys(errors).length !== 0 ? true : false
+                        }
+                      >
+                        <Spinner color="secondary" />
+                      </Button>
+                      
                     </Form>
                   </div>
                 </CardBody>
