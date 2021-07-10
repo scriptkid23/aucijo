@@ -4,6 +4,7 @@ import AuthenticationLayout from "../layouts/authentication.layout";
 import HomeLayout from "../layouts/home.layout";
 import ThemeContextWrapper from "../components/theme-wrapper/theme.wrapper";
 import BackgroundColorWrapper from "../components/background-color-wrapper/background.color.wrapper";
+import AuthenticatedGuard from "../guards/AuthenticatedGuard";
 export default class App extends Component {
   render() {
     return (
@@ -16,7 +17,7 @@ export default class App extends Component {
                 path={["/login", "/register"]}
                 render={(props) => <AuthenticationLayout {...props} />}
               />
-              <Route
+              <AuthenticatedGuard
                 exact
                 path={[
                   "/",

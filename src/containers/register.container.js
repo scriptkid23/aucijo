@@ -131,7 +131,7 @@ export default function RegisterContainer() {
                           Object.keys(errors).length !== 0 ? true : false
                         }
                       >
-                        <Spinner color="secondary" />
+                        Submit
                       </Button>
                       
                     </Form>
