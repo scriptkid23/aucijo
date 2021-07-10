@@ -5,35 +5,43 @@ import {
   CardBody,
   Row,
   Col,
-  CardText,
-  CardTitle,
-  CardSubtitle,
-  InputGroup,
   Input,
-  InputGroupAddon,
   FormGroup,
   Form,
   Alert,
-  FormFeedback,
-  FormText,
-  Spinner,
 } from "reactstrap";
 import { useForm } from "react-hook-form";
+import WrapperLoadingComponent from "../components/wrapper-loading.component";
+import { GAS } from "../helper/constant";
+import WrapperDrizzleComponent from "../components/wrapper-drizzle.component";
 
-
-export default function RegisterContainer() {
+function RegisterContainer({ methods, owner }) {
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm();
-  const [loading, setLoading] = React.useState(false);
-
   const onSubmit = async (data) => {
-    console.log(data);
+    console.log(methods);
+    console.log(owner);
+    try {
+      methods
+        .registerMember(
+          data.first_name,
+          data.last_name,
+          data.email,
+          data.address,
+          data.phone_number
+        )
+        .send({
+          from: owner,
+          gas: GAS,
+        });
+    } catch (error) {
+      console.log(error)
+    }
   };
-  console.log(errors);
   return (
     <div className="index-page">
       <nav className="navbar navbar-expand-lg fixed-top navbar-transparent">
@@ -97,7 +105,10 @@ export default function RegisterContainer() {
                             <label>Email</label>
                             <Input
                               placeholder="your@gmail.com"
-                              {...register("email", { required: true, pattern: /\S+@\S+\.\S+/ })}
+                              {...register("email", {
+                                required: true,
+                                pattern: /\S+@\S+\.\S+/,
+                              })}
                             />
                           </FormGroup>
                         </Col>
@@ -120,7 +131,10 @@ export default function RegisterContainer() {
                             <Input
                               placeholder="0975164536"
                               type="tel"
-                              {...register("phone_number", { required: true, pattern:/^\d+$/ })}
+                              {...register("phone_number", {
+                                required: true,
+                                pattern: /^\d+$/,
+                              })}
                             />
                           </FormGroup>
                         </Col>
@@ -133,7 +147,6 @@ export default function RegisterContainer() {
                       >
                         Submit
                       </Button>
-                      
                     </Form>
                   </div>
                 </CardBody>
@@ -145,3 +158,4 @@ export default function RegisterContainer() {
     </div>
   );
 }
+export default WrapperDrizzleComponent(RegisterContainer);

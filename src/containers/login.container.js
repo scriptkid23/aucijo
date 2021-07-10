@@ -6,21 +6,18 @@ import WrapperDrizzleComponent from "../components/wrapper-drizzle.component";
 import WrapperLoadingComponent from "../components/wrapper-loading.component";
 
 
-function LoginContainer({setLoading, isLoading, methods}) {
+function LoginContainer({setLoading, isLoading, methods }) {
   const history = useHistory();
   const onLogin = async() => {
     setLoading({flag: true, title:'Waiting connect to Metamask'});
     try {
         const data = await window.ethereum.request({ method: 'eth_requestAccounts' })
         if(data){
-          console.log(methods)
+          localStorage.setItem("address",data[0]);
           const flag = await methods.wasRegistered().call({from:data[0]});
           setLoading({flag: false, title:''});
           if(!flag) history.push('/register');
-          else {
-            history.push('/home/dashboard');
-            localStorage.setItem("address",data[0]);
-          }
+          else history.push('/home/dashboard');
         }
     } catch (error) {
       setLoading({flag: false, title:''});
