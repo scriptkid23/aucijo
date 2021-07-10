@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "./Utils.sol";
 import "./Schemas.sol";
-contract OwnerToken is ERC20 {
+contract Aucijo is ERC20 {
     constructor() ERC20("Spirity Token", "SPT") {
         _mint(msg.sender, 0);
     }
