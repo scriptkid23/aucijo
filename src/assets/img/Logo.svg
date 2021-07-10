@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="109" height="123" viewBox="0 0 109 123">
+  <g id="Logo" transform="translate(-168 -91.32)">
+    <text id="Spirity" transform="translate(168 185.32)" fill="#05203d" font-size="32" font-family="Montserrat-Bold, Montserrat" font-weight="700"><tspan x="0" y="0">Spirity</tspan></text>
+    <g id="Group_5" data-name="Group 5" transform="translate(194.698 91)">
+      <circle id="Ellipse_12" data-name="Ellipse 12" cx="28.5" cy="28.5" r="28.5" transform="translate(0.302 0.32)" fill="#05203d"/>
+      <text id="S" transform="translate(17.302 41.32)" fill="#fff" font-size="35" font-family="Montserrat-Bold, Montserrat" font-weight="700"><tspan x="0" y="0">S</tspan></text>
+    </g>
+    <text id="Software_Life" data-name="Software &amp; Life" transform="translate(176 211.32)" fill="#05203d" font-size="12" font-family="Montserrat-Medium, Montserrat" font-weight="500"><tspan x="0" y="0">Software &amp; Life</tspan></text>
+  </g>
+</svg>

@@ -43,7 +43,7 @@ export default function DashboardContainer() {
             <CardHeader>
               <h5 className="card-category">Token</h5>
               <CardTitle tag="h3">
-                <i className="tim-icons icon-coins text-info" /> 763,215 nu
+                <i className="tim-icons icon-coins text-info" /> 763,215 SPT
               </CardTitle>
             </CardHeader>
             <CardBody>
