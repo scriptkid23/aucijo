@@ -191,3 +191,9 @@
   align-items: center;
   height: 100vh;
 }
+.modal-create-auction > .modal-dialog {
+  top:-48px;
+}
+.modal-create-auction > .modal-dialog > .modal-content{
+  background-color: #27293d;
+}

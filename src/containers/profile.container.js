@@ -89,8 +89,9 @@ function ProfileContainer({ member }) {
                   <Row>
                     <Col className="pr-md-1" md="4">
                       <FormGroup>
-                        <label>City</label>
+                        <label>City (disable)</label>
                         <Input
+                          disabled
                           defaultValue="Mike"
                           placeholder="City"
                           type="text"
@@ -99,8 +100,9 @@ function ProfileContainer({ member }) {
                     </Col>
                     <Col className="px-md-1" md="4">
                       <FormGroup>
-                        <label>Country</label>
+                        <label>Country (disable)</label>
                         <Input
+                          disabled
                           defaultValue="Andrew"
                           placeholder="Country"
                           type="text"

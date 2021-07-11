@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import drizzle from "./core/configuration.store";
 import { DrizzleProvider } from "./context/drizzle.context";
 import LoadingContainer from "./containers/loading.container";
+import "react-datetime/css/react-datetime.css";
 import "./assets/css/black-dashboard-react.min.css";
 import "./assets/css/nucleo-icons.css";
 import "./index.css";
