@@ -1,28 +1,17 @@
 import React from "react";
-import classNames from "classnames";
 import {
-  Button,
-  NavLink,
-  ButtonGroup,
   Card,
   CardHeader,
   CardBody,
   CardTitle,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  UncontrolledDropdown,
-  Label,
-  FormGroup,
-  Input,
   Table,
   Row,
   Col,
-  UncontrolledTooltip,
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import CoinRechargeComponent from "../components/coin-recharge.component";
-export default function DashboardContainer() {
+import { connect } from "react-redux";
+function DashboardContainer({member}) {
   return (
     <div className="content">
       <Row>
@@ -31,7 +20,7 @@ export default function DashboardContainer() {
             <CardHeader>
               <h5 className="card-category">Assets</h5>
               <CardTitle tag="h3">
-                <i className="tim-icons icon-app text-info" /> 30 items
+                <i className="tim-icons icon-app text-info" /> {member.items.length} items
               </CardTitle>
             </CardHeader>
             <CardBody>
@@ -44,11 +33,11 @@ export default function DashboardContainer() {
             <CardHeader>
               <h5 className="card-category">Token</h5>
               <CardTitle tag="h3">
-                <i className="tim-icons icon-coins text-info" /> 763,215 SPT
+                <i className="tim-icons icon-coins text-info" /> {member.tokens} SPT
               </CardTitle>
             </CardHeader>
             <CardBody>
-              <CoinRechargeComponent/>
+              <CoinRechargeComponent />
             </CardBody>
           </Card>
         </Col>
@@ -81,3 +70,10 @@ export default function DashboardContainer() {
     </div>
   );
 }
+const mapStateToProps = (state) => {
+  console.log(state)
+  return({
+    member: state.member,
+  })
+}
+export default connect(mapStateToProps)(DashboardContainer)

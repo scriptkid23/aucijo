@@ -2,16 +2,17 @@ import { handleActions, createActions } from "redux-actions";
 
 export const actions = createActions({
   FETCH_MEMBER_DETAIL: [(meta) => meta, (payload) => payload],
+  UPDATE_TOKEN:[meta => meta, payload => payload],
 });
 
 const defaultState = {
   id: 0,
-  token: 0,
+  tokens: 0,
   firsname: "",
   lastname: "",
   email: "",
   phonenumber: "",
-  address: "",
+  _address: "",
   items: [],
 };
 const reducers = handleActions(
@@ -21,6 +22,12 @@ const reducers = handleActions(
         ...state,
         ...action.payload,
       };
+    },
+    [actions.updateToken]:(state, action) => {
+      return{
+        ...state,
+        tokens: action.payload,
+      }
     },
   },
   defaultState

@@ -2,7 +2,13 @@ import React, { useState } from "react";
 
 import { Modal, Form, Input, ModalHeader } from "reactstrap";
 import { useForm } from "react-hook-form";
-export default function CoinRechargeComponent() {
+import WrapperDrizzleComponent from "./wrapper-drizzle.component";
+import { GAS } from "../helper/constant";
+import CustomHook from "../helper/hook";
+import { compose } from "redux";
+import WrapperAlertComponent from "./wrapper-alert.component";
+import { connect } from "react-redux";
+function CoinRechargeComponent({ methods, owner, member }) {
   const [modal, setModal] = useState(false);
   const {
     register,
@@ -10,10 +16,19 @@ export default function CoinRechargeComponent() {
     watch,
     formState: { errors },
   } = useForm();
+  const { updateToken } = CustomHook();
   const toggle = () => setModal(!modal);
-  const onCoinRecharge = (data) => {
-    
-  }
+  const onCoinRecharge = async (data) => {
+    try {
+      await methods.coinCharge(data.coin).send({
+        from: owner,
+        gas: GAS,
+      });
+      updateToken(parseInt(member.tokens) + parseInt(data.coin / 10000));
+    } catch (error) {
+      alert(error.message);
+    }
+  };
   return (
     <React.Fragment>
       <span className="text-info pointer" onClick={toggle}>
@@ -42,3 +57,15 @@ export default function CoinRechargeComponent() {
     </React.Fragment>
   );
 }
+const mapStateToProps = (state) => {
+  return {
+    member: state.member,
+  };
+};
+
+const ComponseCoinRecharge = compose(
+  WrapperDrizzleComponent,
+  WrapperAlertComponent
+)(CoinRechargeComponent);
+
+export default connect(mapStateToProps)(ComponseCoinRecharge);

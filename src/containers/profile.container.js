@@ -1,5 +1,5 @@
-
 import React from "react";
+import { connect } from "react-redux";
 
 import {
   Button,
@@ -15,7 +15,7 @@ import {
   Col,
 } from "reactstrap";
 
-function ProfileContainer() {
+function ProfileContainer({ member }) {
   return (
     <>
       <div className="content">
@@ -44,7 +44,11 @@ function ProfileContainer() {
                         <label htmlFor="exampleInputEmail1">
                           Email address
                         </label>
-                        <Input placeholder="mike@email.com" type="email" />
+                        <Input
+                          defaultValue={member.email}
+                          placeholder="mike@email.com"
+                          type="email"
+                        />
                       </FormGroup>
                     </Col>
                   </Row>
@@ -53,7 +57,7 @@ function ProfileContainer() {
                       <FormGroup>
                         <label>First Name</label>
                         <Input
-                          defaultValue="Mike"
+                          defaultValue={member.firstname}
                           placeholder="Company"
                           type="text"
                         />
@@ -63,7 +67,7 @@ function ProfileContainer() {
                       <FormGroup>
                         <label>Last Name</label>
                         <Input
-                          defaultValue="Andrew"
+                          defaultValue={member.lastname}
                           placeholder="Last Name"
                           type="text"
                         />
@@ -75,7 +79,7 @@ function ProfileContainer() {
                       <FormGroup>
                         <label>Address</label>
                         <Input
-                          defaultValue="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
+                          defaultValue={member._address}
                           placeholder="Home Address"
                           type="text"
                         />
@@ -106,11 +110,14 @@ function ProfileContainer() {
                     <Col className="pl-md-1" md="4">
                       <FormGroup>
                         <label>Phone number</label>
-                        <Input placeholder="0975164536" type="tel" />
+                        <Input
+                          defaultValue={member.phonenumber}
+                          placeholder="0975164536"
+                          type="tel"
+                        />
                       </FormGroup>
                     </Col>
                   </Row>
-                 
                 </Form>
               </CardBody>
               <CardFooter>
@@ -132,18 +139,17 @@ function ProfileContainer() {
                   <a href="#pablo" onClick={(e) => e.preventDefault()}>
                     <img
                       alt="..."
-                      style={{objectFit:'cover'}}
+                      style={{ objectFit: "cover" }}
                       className="avatar"
-                      src={require('../assets/img/avatar-1.png').default}
+                      src={require("../assets/img/avatar-1.png").default}
                     />
-                    <h5 className="title">Mike Andrew</h5>
+                    <h5 className="title">{member.firstname} {member.lastname}</h5>
                   </a>
-                  <p className="description">Ceo/Co-Founder</p>
+                  <p className="description">Member of aucijo</p>
                 </div>
                 <div className="card-description">
                   Do not be scared of the truth because we need to restart the
-                  human foundation in truth And I love you like Kanye loves
-                  Kanye I love Rick Owens’ bed design but the back is...
+                  human foundation in truth.
                 </div>
               </CardBody>
               <CardFooter>
@@ -166,5 +172,9 @@ function ProfileContainer() {
     </>
   );
 }
-
-export default ProfileContainer;
+const mapStateToProps = (state) => {
+  return {
+    member: state.member,
+  };
+};
+export default connect(mapStateToProps)(ProfileContainer);
