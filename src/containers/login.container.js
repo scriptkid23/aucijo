@@ -33,7 +33,7 @@ function LoginContainer({setLoading, isLoading, methods }) {
           <div className="navbar-translate">
             <a
               className="navbar-brand"
-              href="https://demos.creative-tim.com/blk-design-system/index.html"
+              href="https://google.com"
               rel="tooltip"
               title="Designed and Coded by Creative Tim"
               data-placement="bottom"

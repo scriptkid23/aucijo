@@ -20,7 +20,7 @@ export default class App extends Component {
               <AuthenticatedGuard
                 exact
                 path={[
-                  "/",
+                  // "/",
                   "/home",
                   "/home/:sub",
                   "/home/auction/:id",
@@ -28,6 +28,7 @@ export default class App extends Component {
                 ]}
                 component={HomeLayout}
               />
+              <Redirect to='/home/dashboard'/>
             </Switch>
           </BrowserRouter>
         </BackgroundColorWrapper>

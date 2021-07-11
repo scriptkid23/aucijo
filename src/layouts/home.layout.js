@@ -8,11 +8,15 @@ import AdminNavbar from "../components/admin-navbar.component";
 import logo from '../assets/img/spirity-logo.png';
 import { Switch, Redirect, useLocation, useHistory } from "react-router-dom";
 import WrapperDrizzleComponent from "../components/wrapper-drizzle.component";
+import CustomHook from "../helper/hook";
+import { compose } from "redux";
+import WrapperLoadingComponent from "../components/wrapper-loading.component";
 
 var ps;
 function HomeLayout(props) {
   const location = useLocation();
   const history = useHistory();
+  const {fetchMemberDetail} = CustomHook();
   const mainPanelRef = React.useRef(null);
   const [sidebarOpened, setsidebarOpened] = React.useState(
     document.documentElement.className.indexOf("nav-open") !== -1
@@ -68,8 +72,23 @@ function HomeLayout(props) {
   //   const flag = await props.methods.wasRegistered().call({from:props.owner});
   //   if(!flag) history.push('/register');
   // }
+  const getMemberDetail = async() => {
+    props.setLoading({flag:true, title:'Fetch data from blockchain.'})
+    try {
+      const data = await props.methods.getProfile().call({from:props.owner});
+      if(data){
+        fetchMemberDetail(data);
+        props.setLoading({flag:false, title:''})
+      }
+    } catch (error) {
+      console.log(error.message)
+      props.setLoading({flag:false, title:''})
+    }
+   
+  }
   React.useEffect(() => {
     // checkRegistered();
+    getMemberDetail();
     window.ethereum.on("accountsChanged", (data) => {
       if(data.length === 0){
         localStorage.clear();
@@ -109,4 +128,8 @@ function HomeLayout(props) {
     </BackgroundColorContext.Consumer>
   );
 }
-export default WrapperDrizzleComponent(HomeLayout);
+export default compose(
+  WrapperDrizzleComponent,
+  WrapperLoadingComponent,
+)(HomeLayout)
+

@@ -21,6 +21,7 @@ import {
   UncontrolledTooltip,
 } from "reactstrap";
 import { Link } from "react-router-dom";
+import CoinRechargeComponent from "../components/coin-recharge.component";
 export default function DashboardContainer() {
   return (
     <div className="content">
@@ -47,7 +48,7 @@ export default function DashboardContainer() {
               </CardTitle>
             </CardHeader>
             <CardBody>
-              <span className="text-info pointer">Coin recharge</span>
+              <CoinRechargeComponent/>
             </CardBody>
           </Card>
         </Col>
