@@ -6,17 +6,28 @@ import { compose } from "redux";
 import NewItemComponent from "../components/new-item.component";
 import WrapperDrizzleComponent from "../components/wrapper-drizzle.component";
 import WrapperLoadingComponent from "../components/wrapper-loading.component";
+import CustomHook from "../helper/hook";
 
-function ListItemsContainer({ setLoading, member, methods, owner }) {
+function ListItemsContainer({ setLoading, member, methods, owner, events }) {
   const history = useHistory();
   const goBack = () => {
     history.goBack();
   };
+  const { updateItem } = CustomHook();
   useEffect(() => {
-    // setLoading({flag: true, title:'Loading data'})
-    // setTimeout(() => {
-    //   setLoading({flag: false, title:''})
-    // },3000)
+    events.AddItem(
+      {
+        filter: { _from: owner },
+      },
+      (err, event) => {
+        let newItem = {
+          id: event.returnValues._id,
+          name: event.returnValues._value,
+          owner: event.returnValues._from,
+        };
+        updateItem(newItem);
+      }
+    );
   }, []);
   return (
     <div className="content">

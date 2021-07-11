@@ -13,6 +13,7 @@ const WrapperDrizzleComponent = (OriginalComponent) => {
         <OriginalComponent
           methods={this.context.contracts.Aucijo.methods}
           context={this.context}
+          events = {this.context.contracts.Aucijo.events}
           owner={localStorage.getItem("address")}
           {...this.props}
         />

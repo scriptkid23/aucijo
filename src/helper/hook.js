@@ -12,10 +12,13 @@ export default function CustomHook(){
     const updateToken = (data) => {
         dispatch(memberActions.updateToken(data));
     }
-
+    const updateItem = (data) => {
+        dispatch(memberActions.updateItem(data));
+    }
     return{
         fetchMemberDetail,
         updateToken,
+        updateItem,
     }
 
 

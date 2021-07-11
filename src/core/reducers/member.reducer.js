@@ -3,6 +3,7 @@ import { handleActions, createActions } from "redux-actions";
 export const actions = createActions({
   FETCH_MEMBER_DETAIL: [(meta) => meta, (payload) => payload],
   UPDATE_TOKEN:[meta => meta, payload => payload],
+  UPDATE_ITEM:[meta => meta, payload => payload],
 });
 
 const defaultState = {
@@ -17,6 +18,12 @@ const defaultState = {
 };
 const reducers = handleActions(
   {
+    [actions.updateItem]:(state, action) =>{
+      return{
+        ...state,
+        items:[...state.items, action.payload],
+      }
+    },
     [actions.fetchMemberDetail]: (state, action) => {
       return {
         ...state,
