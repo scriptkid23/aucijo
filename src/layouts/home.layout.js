@@ -16,7 +16,7 @@ var ps;
 function HomeLayout(props) {
   const location = useLocation();
   const history = useHistory();
-  const {fetchMemberDetail, fetchAuctionList} = CustomHook();
+  const {fetchMemberDetail, fetchAuctionList, updateAuction} = CustomHook();
   const mainPanelRef = React.useRef(null);
   const [sidebarOpened, setsidebarOpened] = React.useState(
     document.documentElement.className.indexOf("nav-open") !== -1
@@ -72,7 +72,7 @@ function HomeLayout(props) {
   //   const flag = await props.methods.wasRegistered().call({from:props.owner});
   //   if(!flag) history.push('/register');
   // }
-  const getMemberDetail = async() => {
+  const fetchData = async() => {
     try {
       const data = await props.methods.getProfile().call({from:props.owner});
       const auctionList = await props.methods.getAllAuction().call({from:props.owner});
@@ -87,7 +87,10 @@ function HomeLayout(props) {
   }
   React.useEffect(() => {
     // checkRegistered();
-    getMemberDetail();
+    fetchData();
+    props.events.AddAuction({},(err, event) => {
+      updateAuction(event.returnValues);
+    })
     window.ethereum.on("accountsChanged", (data) => {
       if(data.length === 0){
         localStorage.clear();

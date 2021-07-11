@@ -8,7 +8,7 @@ export const options = {
   },
   contracts: [Aucijo],
   events: {
-    Aucijo: ["AddItem"],
+    Aucijo: ["AddItem","AddAuction"],
   },
   polls: {
     // set polling interval to 30secs so we don't get buried in poll events

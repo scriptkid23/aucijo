@@ -32,6 +32,7 @@ contract Aucijo is ERC20 {
     }
 
     event AddItem(address indexed _from, uint _id, string _value);
+    event AddAuction(uint id, string name,uint itemId,  string description, uint price, uint start_time, uint end_time);
 
     function registerMember(string memory firstname, string memory lastname, string memory email, string memory _address, string memory phonenumber) public {
         require(!registered[msg.sender],'Member was registered!');
@@ -95,6 +96,7 @@ contract Aucijo is ERC20 {
         itemIsAuction[itemId] = true;
         Auction memory auction = Auction(_auctionId.current(), name, itemId, description, price, start_time, end_time, AuctionStatus.START, msg.sender, msg.sender);
         auctions.push(auction);
+         emit AddAuction(_auctionId.current(), name, itemId, description, price, start_time, end_time);
         _auctionId.increment();
     }
     

@@ -16,6 +16,12 @@ const reducers = handleActions(
         auctions:action.payload,
       }
     },
+    [actions.updateAuction]:(state, action) => {
+        return{
+            ...state,
+            auctions:[...state.auctions, action.payload],
+        }
+    },
     
   },
   defaultState

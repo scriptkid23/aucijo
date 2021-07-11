@@ -18,11 +18,15 @@ export default function CustomHook(){
     const updateItem = (data) => {
         dispatch(memberActions.updateItem(data));
     }
+    const updateAuction = (data) => {
+        dispatch(auctionActions.updateAuction(data));
+    }
     return{
         fetchMemberDetail,
         fetchAuctionList,
         updateToken,
         updateItem,
+        updateAuction,
 
     }
 
