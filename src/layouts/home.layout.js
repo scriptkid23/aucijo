@@ -73,16 +73,13 @@ function HomeLayout(props) {
   //   if(!flag) history.push('/register');
   // }
   const getMemberDetail = async() => {
-    props.setLoading({flag:true, title:'Fetch data from blockchain.'})
     try {
       const data = await props.methods.getProfile().call({from:props.owner});
       if(data){
         fetchMemberDetail(data);
-        props.setLoading({flag:false, title:''})
       }
     } catch (error) {
-      console.log(error.message)
-      props.setLoading({flag:false, title:''})
+      alert(error.message)
     }
    
   }
@@ -130,6 +127,5 @@ function HomeLayout(props) {
 }
 export default compose(
   WrapperDrizzleComponent,
-  WrapperLoadingComponent,
 )(HomeLayout)
 
