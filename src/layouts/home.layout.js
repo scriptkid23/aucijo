@@ -16,7 +16,7 @@ var ps;
 function HomeLayout(props) {
   const location = useLocation();
   const history = useHistory();
-  const {fetchMemberDetail} = CustomHook();
+  const {fetchMemberDetail, fetchAuctionList} = CustomHook();
   const mainPanelRef = React.useRef(null);
   const [sidebarOpened, setsidebarOpened] = React.useState(
     document.documentElement.className.indexOf("nav-open") !== -1
@@ -75,8 +75,10 @@ function HomeLayout(props) {
   const getMemberDetail = async() => {
     try {
       const data = await props.methods.getProfile().call({from:props.owner});
+      const auctionList = await props.methods.getAllAuction().call({from:props.owner});
       if(data){
         fetchMemberDetail(data);
+        fetchAuctionList(auctionList);
       }
     } catch (error) {
       alert(error.message)

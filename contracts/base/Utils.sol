@@ -2,7 +2,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 import "./Schemas.sol";
-library Array {
+
+library ArrayLib {
     
     function exist(Item[] storage self, uint id) internal view returns(bool value){
         for(uint i = 0; i < self.length; i++){

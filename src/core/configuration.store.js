@@ -4,7 +4,7 @@ import { createLogger } from "redux-logger";
 import { Drizzle, generateStore } from "@drizzle/store";
 import {options} from "../helper/constant";
 import { combineReducers } from "redux";
-import { MemberReducer } from "./reducers";
+import { AuctionReducer, MemberReducer } from "./reducers";
 
 
 const sagaMiddleware = createSagaMiddleware();
@@ -12,6 +12,7 @@ const loggerMiddleware = createLogger();
 
 const appReducers = {
   member: MemberReducer,
+  auctions: AuctionReducer,
 };
 const store = generateStore({
   appReducers,

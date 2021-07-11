@@ -3,7 +3,7 @@
 pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
-import "./Utils.sol";
+import {ArrayLib} from "./Utils.sol";
 import "./Schemas.sol";
 contract Aucijo is ERC20 {
     constructor() ERC20("Spirity Token", "SPT") {
@@ -13,7 +13,7 @@ contract Aucijo is ERC20 {
     address private StoreToken = 0xaefdf92622C243a246eC10AD9e1b218F0a0EF0C3;
     
     using Counters for Counters.Counter;
-    using Array for Item[];
+    using ArrayLib for Item[];
     
     Counters.Counter private _auctionId;
     Counters.Counter private _memberId;
@@ -24,7 +24,8 @@ contract Aucijo is ERC20 {
     mapping(uint => Item) items;
     mapping(address => bool) registered;
     mapping(uint => bool) itemExist;
-    
+    mapping(uint => bool) itemIsAuction;
+
     modifier mRegistered() {
         require(registered[msg.sender], 'Member was not registered!');
         _;
@@ -71,6 +72,7 @@ contract Aucijo is ERC20 {
         items[auctions[id].itemId].owner = auctions[id].currentKing;
         members[auctions[id].currentKing].items.push(items[auctions[id].itemId]);
         auctions[id].status = AuctionStatus.CLOSED;
+        itemIsAuction[auctions[id].itemId] = false;
         
     } 
     function findItemById(uint id) public view mRegistered returns(Item memory){
@@ -87,8 +89,10 @@ contract Aucijo is ERC20 {
         auctions[id].status = AuctionStatus.CLOSED;
     }
     function createAuction(string memory name,uint itemId,  string memory description, uint price, uint start_time, uint end_time) public mRegistered{
-        require(keccak256(abi.encodePacked((name))) > 0 && start_time >= block.timestamp && end_time > start_time);
+        require(keccak256(abi.encodePacked((name))) > 0 && start_time >= block.timestamp && end_time > start_time,'Outside of auction time');
         require(itemExist[itemId],'Item not Exist');
+        require(!itemIsAuction[itemId],'Item was auction!');
+        itemIsAuction[itemId] = true;
         Auction memory auction = Auction(_auctionId.current(), name, itemId, description, price, start_time, end_time, AuctionStatus.START, msg.sender, msg.sender);
         auctions.push(auction);
         _auctionId.increment();

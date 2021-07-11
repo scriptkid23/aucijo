@@ -1,7 +1,10 @@
 import React from "react";
+import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { Col, Row, Card, CardHeader, CardBody, Button } from "reactstrap";
-export default function AcutionContainer() {
+import { compose } from "redux";
+import WrapperDrizzleComponent from "../components/wrapper-drizzle.component";
+function AuctionContainer({auctions}) {
   const history = useHistory();
   return (
     <div className="content">
@@ -10,25 +13,28 @@ export default function AcutionContainer() {
           <Card>
             <CardHeader>
               <h5 className="title">
-                Currently there are <span className="text-info">100</span>{" "}
+                Currently there are <span className="text-info">{auctions.length}</span>{" "}
                 auction activities
               </h5>
             </CardHeader>
             <CardBody className="all-icons">
               <Row>
-                <Col
-                  className="font-icon-list col-xs-6 col-xs-6"
-                  lg="2"
-                  md="3"
-                  sm="4"
-                >
-                  <div className="font-icon-detail">
-                    <i className="tim-icons icon-tag" />
-                    <p>ID: 123<br/>Triumph Street Twin</p>
-                    
-                    <Button onClick={() => history.push(`/home/auction/${'123'}`)}>Join</Button>
-                  </div>
-                </Col>
+                {auctions.map((value,index) => {
+                  return(
+                    <Col
+                    className="font-icon-list col-xs-6 col-xs-6"
+                    md="4"            
+                  >
+                    <div className="font-icon-detail">
+                      <i className="tim-icons icon-tag" />
+                      <p>ID: {value.id}<br/>{value.name}</p>
+                      
+                      <Button onClick={() => history.push(`/home/auction/${value.id}`)}>Join</Button>
+                    </div>
+                  </Col>
+                  )
+                })}
+               
               </Row>
             </CardBody>
           </Card>
@@ -37,3 +43,12 @@ export default function AcutionContainer() {
     </div>
   );
 }
+const componseAuctionContainer = compose(
+  WrapperDrizzleComponent,
+)(AuctionContainer)
+const mapStateToProps = (state) =>{
+  return{
+    auctions: state.auctions.auctions,
+  }
+}
+export default connect(mapStateToProps)(componseAuctionContainer);

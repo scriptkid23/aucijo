@@ -1,2 +1,3 @@
 import MemberReducer from './member.reducer';
-export {MemberReducer}
+import AuctionReducer from './auction.reducer';
+export {MemberReducer, AuctionReducer};
