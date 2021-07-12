@@ -1,121 +1,15 @@
 import moment from "moment";
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
 import { connect } from "react-redux";
-import { useHistory, useLocation, useParams } from "react-router-dom";
-import {
-  Card,
-  CardBody,
-  Col,
-  Row,
-  CardFooter,
-  Button,
-  UncontrolledTooltip,
-  Input,
-  CardHeader,
-  Table,
-  Form,
-} from "reactstrap";
+import { useHistory, useParams } from "react-router-dom";
+import { Card, CardBody, Col, Row, CardHeader, Table } from "reactstrap";
 import { compose } from "redux";
+import AuctionActionWithOwner from "../components/auction-action-with-owner.component";
+import AuctionActionWithGuest from "../components/auction-action-with-guest.component";
 import WrapperAlertComponent from "../components/wrapper-alert.component";
 import WrapperDrizzleComponent from "../components/wrapper-drizzle.component";
-import { GAS } from "../helper/constant";
 import CustomHook from "../helper/hook";
-function AuctionActionWithOwner({ auction, methods, itemId, owner }) {
-  return (
-    <CardFooter>
-      <div className="button-container">
-        <Button
-          className="btn-icon btn-round"
-          color="success"
-          id="tooltip-agree"
-        >
-          <i className="far fa-handshake"></i>
-        </Button>
-        <UncontrolledTooltip
-          delay={0}
-          target="tooltip-agree"
-          placement="bottom"
-        >
-          Agree
-        </UncontrolledTooltip>
-        <Button
-          className="btn-icon btn-round"
-          color="primary"
-          id="tooltip-revoke"
-        >
-          <i className="far fa-times-circle"></i>
-        </Button>
-        <UncontrolledTooltip
-          delay={0}
-          target="tooltip-revoke"
-          placement="bottom"
-        >
-          Revoke
-        </UncontrolledTooltip>
-      </div>
-    </CardFooter>
-  );
-}
-function AuctionActionWithGuest({ auction, methods, itemId, owner, setAlert }) {
-  const bid = async (data) => {
-    try {
-      await methods.bid(itemId, data.price).send({
-        from: owner,
-        gas: GAS,
-      });
-    } catch (error) {
-      setAlert("danger", error.message);
-    }
-  };
-  const { register, handleSubmit } = useForm();
-  return (
-    <CardFooter>
-      <div className="button-container">
-        {parseInt(auction.end_time) >= moment().unix() && (
-          <Form
-            className="d-flex align-items-center"
-            onSubmit={handleSubmit(bid)}
-          >
-            <Input
-              placeholder="Type the number of SPT"
-              {...register("price", { required: true })}
-            />
-            <Button className="btn-icon" color="success" id="tooltip-bid">
-              <i className="far fa-hand-paper"></i>
-            </Button>
-            <UncontrolledTooltip
-              delay={0}
-              target="tooltip-bid"
-              placement="bottom"
-            >
-              Bid
-            </UncontrolledTooltip>
-          </Form>
-        )}
 
-        {parseInt(auction.end_time) < moment().unix() && (
-          <React.Fragment>
-            <Button
-              className="btn-icon btn-round"
-              color="primary"
-              id="tooltip-revoke"
-            >
-              <i className="far fa-times-circle"></i>
-            </Button>
-            <UncontrolledTooltip
-              delay={0}
-              target="tooltip-revoke"
-              placement="bottom"
-            >
-              Revoke
-            </UncontrolledTooltip>
-          </React.Fragment>
-        )}
-      </div>
-    </CardFooter>
-  );
-}
 function AuctionDetail({ methods, owner, auction, events, setAlert }) {
   const history = useHistory();
   const { id } = useParams();
