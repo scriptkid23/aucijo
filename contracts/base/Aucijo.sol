@@ -86,6 +86,7 @@ contract Aucijo is ERC20 {
         require(auctions[id].owner != msg.sender,'You is owner');
         require(auctions[id].currentKing == msg.sender,'You not king');
         require(auctions[id].end_time < block.timestamp,'You not permission');
+        require(auctions[id].status == AuctionStatus.START,'Auction was closed');
         _transfer(StoreToken, msg.sender, auctions[id].price);
         members[msg.sender].tokens = balanceOf(msg.sender);
         auctions[id].status = AuctionStatus.CLOSED;

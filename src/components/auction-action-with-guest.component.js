@@ -26,6 +26,17 @@ export default function AuctionActionWithGuest({
       setAlert("danger", error.message);
     }
   };
+  const revokeToken = async () => {
+     try {
+         await methods.revokeToken(itemId).send({
+             from: owner,
+             gas: GAS
+         })
+         setAlert("success","Revoke token succeded");
+     } catch (error) {
+         setAlert("danger",error.message)
+     }
+  }
   const { register, handleSubmit } = useForm();
   return (
     <CardFooter>
@@ -58,6 +69,7 @@ export default function AuctionActionWithGuest({
               className="btn-icon btn-round"
               color="primary"
               id="tooltip-revoke"
+              onClick={revokeToken}
             >
               <i className="far fa-times-circle"></i>
             </Button>
