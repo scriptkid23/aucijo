@@ -66,6 +66,8 @@ contract Aucijo is ERC20 {
     function agree(uint id) public mRegistered{
         require(auctions[id].owner == msg.sender, 'not permission!'); // yêu cầu phải là chủ sở hữu mới được thực thi
         require(auctions[id].start_time <= block.timestamp && auctions[id].end_time >= block.timestamp, 'Outides of auction time');
+        require(auctions[id].status == AuctionStatus.START,'Auction was closed');
+        require(auctions[id].currentKing != msg.sender,'You are destructive');
         // processing seller: auctions[id].owner
         _transfer(StoreToken, auctions[id].owner, auctions[id].price);
         members[auctions[id].owner].tokens = balanceOf(auctions[id].owner);
