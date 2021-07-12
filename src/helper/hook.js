@@ -24,6 +24,9 @@ export default function CustomHook(){
     const fetchAuctionDetail = (data) => {
         dispatch(auctionActions.fetchAuctionDetail(data));
     }
+    const updateAuctionDetail = (data) => {
+        dispatch(auctionActions.updateAuctionDetail(data));
+    }
     return{
         fetchMemberDetail,
         fetchAuctionList,
@@ -31,7 +34,7 @@ export default function CustomHook(){
         updateItem,
         updateAuction,
         fetchAuctionDetail,
-
+        updateAuctionDetail,
     }
 
 

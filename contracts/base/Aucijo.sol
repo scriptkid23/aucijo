@@ -33,7 +33,7 @@ contract Aucijo is ERC20 {
 
     event AddItem(address indexed _from, uint _id, string _value);
     event AddAuction(uint id, string name,uint itemId,  string description, uint price, uint start_time, uint end_time);
-    event BecomeKing(uint indexed id, address currentKing, uint becomeAt);
+    event BecomeKing(uint indexed id, address currentKing, uint price, uint becomeAt);
     
     function registerMember(string memory firstname, string memory lastname, string memory email, string memory _address, string memory phonenumber) public {
         require(!registered[msg.sender],'Member was registered!');
@@ -124,7 +124,7 @@ contract Aucijo is ERC20 {
         auctions[id].currentKing = msg.sender;
         transfer(StoreToken, price);
         members[msg.sender].tokens = balanceOf(msg.sender);
-        emit BecomeKing(id, msg.sender, block.timestamp);
+        emit BecomeKing(id, msg.sender, price, block.timestamp);
     }
     function getCurrentTime() public view mRegistered returns(uint){
         return block.timestamp;

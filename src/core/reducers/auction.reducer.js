@@ -4,12 +4,14 @@ export const actions = createActions({
   FETCH_AUCTION_LIST: [(meta) => meta, (payload) => payload],
   UPDATE_AUCTION:[meta => meta, payload => payload],
   FETCH_AUCTION_DETAIL:[meta => meta, payload => payload],
+  UPDATE_AUCTION_DETAIL:[meta => meta, payload => payload],
 });
 
 const defaultState = {
     auctions:[],
     auctionDetail:{
       owner:"",
+      currentKing: "",
     },
 };
 const reducers = handleActions(
@@ -32,6 +34,16 @@ const reducers = handleActions(
           auctionDetail: action.payload,
       }
   },
+    [actions.updateAuctionDetail]:(state, action) => {
+      return{
+        ...state,
+        auctionDetail:{
+          ...state.auctionDetail,
+          currentKing: action.payload.currentKing,
+          price: action.payload.price,
+        }
+      }
+    },  
     
   },
   defaultState

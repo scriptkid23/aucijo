@@ -1,5 +1,6 @@
 import moment from "moment";
-import React from "react";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 import { connect } from "react-redux";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import {
@@ -13,11 +14,14 @@ import {
   Input,
   CardHeader,
   Table,
+  Form,
 } from "reactstrap";
 import { compose } from "redux";
+import WrapperAlertComponent from "../components/wrapper-alert.component";
 import WrapperDrizzleComponent from "../components/wrapper-drizzle.component";
+import { GAS } from "../helper/constant";
 import CustomHook from "../helper/hook";
-function AuctionActionWithOwner() {
+function AuctionActionWithOwner({ auction, methods, itemId, owner }) {
   return (
     <CardFooter>
       <div className="button-container">
@@ -53,40 +57,70 @@ function AuctionActionWithOwner() {
     </CardFooter>
   );
 }
-function AuctionActionWithGuest() {
+function AuctionActionWithGuest({ auction, methods, itemId, owner, setAlert }) {
+  const bid = async (data) => {
+    try {
+      await methods.bid(itemId, data.price).send({
+        from: owner,
+        gas: GAS,
+      });
+    } catch (error) {
+      setAlert("danger", error.message);
+    }
+  };
+  const { register, handleSubmit } = useForm();
   return (
     <CardFooter>
-      <div className="button-container d-flex align-items-center">
-        <Input placeholder="Type the number of SPT" />
-        <Button className="btn-icon" color="success" id="tooltip-bid">
-          <i className="far fa-hand-paper"></i>
-        </Button>
-        <UncontrolledTooltip delay={0} target="tooltip-bid" placement="bottom">
-          Bid
-        </UncontrolledTooltip>
-        {/* if current time > end time then render  */}
-        {/* <Button
-      className="btn-icon btn-round"
-      color="primary"
-      id="tooltip-revoke"
-    >
-      <i className="far fa-times-circle"></i>
-    </Button>
-    <UncontrolledTooltip
-      delay={0}
-      target="tooltip-revoke"
-      placement="bottom"
-    >
-      Revoke
-    </UncontrolledTooltip> */}
+      <div className="button-container">
+        {parseInt(auction.end_time) >= moment().unix() && (
+          <Form
+            className="d-flex align-items-center"
+            onSubmit={handleSubmit(bid)}
+          >
+            <Input
+              placeholder="Type the number of SPT"
+              {...register("price", { required: true })}
+            />
+            <Button className="btn-icon" color="success" id="tooltip-bid">
+              <i className="far fa-hand-paper"></i>
+            </Button>
+            <UncontrolledTooltip
+              delay={0}
+              target="tooltip-bid"
+              placement="bottom"
+            >
+              Bid
+            </UncontrolledTooltip>
+          </Form>
+        )}
+
+        {parseInt(auction.end_time) < moment().unix() && (
+          <React.Fragment>
+            <Button
+              className="btn-icon btn-round"
+              color="primary"
+              id="tooltip-revoke"
+            >
+              <i className="far fa-times-circle"></i>
+            </Button>
+            <UncontrolledTooltip
+              delay={0}
+              target="tooltip-revoke"
+              placement="bottom"
+            >
+              Revoke
+            </UncontrolledTooltip>
+          </React.Fragment>
+        )}
       </div>
     </CardFooter>
   );
 }
-function AuctionDetail({ methods, owner, auction }) {
+function AuctionDetail({ methods, owner, auction, events, setAlert }) {
   const history = useHistory();
   const { id } = useParams();
-  const { fetchAuctionDetail } = CustomHook();
+  const [logs, setLog] = useState([]);
+  const { fetchAuctionDetail, updateAuctionDetail } = CustomHook();
   const goBack = () => {
     history.goBack();
   };
@@ -96,8 +130,23 @@ function AuctionDetail({ methods, owner, auction }) {
   };
   React.useEffect(() => {
     getAuctionDetail(id);
+    events.BecomeKing(
+      {
+        filter: { id: id },
+      },
+      (err, event) => {
+        let object = {
+          currentKing: event.returnValues.currentKing,
+          price: event.returnValues.price,
+          becomeAt: event.returnValues.becomeAt,
+        };
+        logs.push(object);
+        setLog(logs);
+        updateAuctionDetail(object);
+      }
+    );
   }, []);
-  console.log(auction);
+
   return (
     <div className="content">
       <div className="mb-3">
@@ -124,7 +173,7 @@ function AuctionDetail({ methods, owner, auction }) {
                       className="avatar"
                       src={require("../assets/img/items.png").default}
                     />
-                    <h5 className="title">ID: {auction.id}</h5>
+                    <h5 className="title">Price {auction.price} SPT</h5>
                   </a>
                   <p className="description">{auction.name}</p>
                 </div>
@@ -134,11 +183,23 @@ function AuctionDetail({ methods, owner, auction }) {
               </CardBody>
 
               {auction.owner.toLowerCase() === owner.toLowerCase() && (
-                <AuctionActionWithOwner />
+                <AuctionActionWithOwner
+                  auction={auction}
+                  methods={methods}
+                  itemId={id}
+                  owner={owner}
+                  setAlert={setAlert}
+                />
               )}
 
               {auction.owner.toLowerCase() !== owner.toLowerCase() && (
-                <AuctionActionWithGuest />
+                <AuctionActionWithGuest
+                  auction={auction}
+                  methods={methods}
+                  itemId={id}
+                  owner={owner}
+                  setAlert={setAlert}
+                />
               )}
             </Card>
           </Col>
@@ -147,27 +208,49 @@ function AuctionDetail({ methods, owner, auction }) {
               <CardHeader>
                 <div>
                   Current king:{" "}
-                  <span className="text-info">{auction.currentKing}</span>
+                  <span className="text-info">
+                    {auction.currentKing.toLowerCase() === owner.toLowerCase()
+                      ? "Me"
+                      : auction.currentKing}
+                  </span>
                 </div>
                 <div>
                   Start time{" "}
-                  <span className="text-info">{moment.unix(auction.start_time).format('MMMM Do YYYY, h:mm:ss a')}</span>{" "}
-                  to{" "}<span className="text-info">{moment.unix(auction.end_time).format('MMMM Do YYYY, h:mm:ss a')}</span>
+                  <span className="text-info">
+                    {moment
+                      .unix(auction.start_time)
+                      .format("MMMM Do YYYY, h:mm:ss A")}
+                  </span>{" "}
+                  to{" "}
+                  <span className="text-info">
+                    {moment
+                      .unix(auction.end_time)
+                      .format("MMMM Do YYYY, h:mm:ss A")}
+                  </span>
                 </div>
               </CardHeader>
               <CardBody>
                 <div className="table-full-width table-responsive">
                   <Table>
                     <tbody>
-                      <tr>
-                        <td>
-                          <p className="title">Update the new king</p>
-                          <p className="text-muted">
-                            <span className="text-info">Gucci Gang</span> become
-                            the king at 24/06/2021 8:30 PM
-                          </p>
-                        </td>
-                      </tr>
+                      {logs.map((value, index) => {
+                        return (
+                          <tr>
+                            <td>
+                              <p className="title">Update the new king</p>
+                              <p className="text-muted">
+                                <span className="text-info">
+                                  {value.currentKing}
+                                </span>{" "}
+                                become the king at{" "}
+                                {moment
+                                  .unix(value.becomeAt)
+                                  .format("MM/DD/YYYY h:mm:ss A")}
+                              </p>
+                            </td>
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </Table>
                 </div>
@@ -184,5 +267,8 @@ const mapStateToProps = (state) => {
     auction: state.auctions.auctionDetail,
   };
 };
-const composeAuctionDetail = compose(WrapperDrizzleComponent)(AuctionDetail);
+const composeAuctionDetail = compose(
+  WrapperDrizzleComponent,
+  WrapperAlertComponent
+)(AuctionDetail);
 export default connect(mapStateToProps)(composeAuctionDetail);
