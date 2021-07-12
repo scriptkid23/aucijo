@@ -79,6 +79,17 @@ contract Aucijo is ERC20 {
         itemIsAuction[auctions[id].itemId] = false;
         
     } 
+    function revokeAuction(uint id) public mRegistered{
+        require(auctions[id].owner == msg.sender, 'not permission!');
+        require(auctions[id].start_time <= block.timestamp && auctions[id].end_time >= block.timestamp, 'Outides of auction time');
+        require(auctions[id].status == AuctionStatus.START,'Auction was closed');
+        if(auctions[id].currentKing != msg.sender){
+            _transfer(StoreToken, auctions[id].currentKing, auctions[id].price);
+            members[auctions[id].currentKing].tokens = balanceOf(auctions[id].owner);
+        }
+        auctions[id].status = AuctionStatus.CLOSED;
+        itemIsAuction[auctions[id].itemId] = false;
+    }
     function findItemById(uint id) public view mRegistered returns(Item memory){
         return items[id];
     }
