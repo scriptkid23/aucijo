@@ -13,6 +13,7 @@ struct Member {
         string phonenumber;
         string _address;
         Item[] items;
+        HistoryTransaction[] historyTransaction;
     }
 struct Item {
         uint id;
@@ -30,4 +31,11 @@ struct Auction {
         AuctionStatus status;
         address owner;
         address currentKing;
+}
+struct HistoryTransaction {
+    uint id;
+    string itemName;
+    string action;
+    address dest;
+    uint createdAt;
 }

@@ -15,4 +15,4 @@ export const options = {
     accounts: 30000,
   },
 };
-export const GAS = 300000;
+export const GAS = 700000;

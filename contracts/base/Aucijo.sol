@@ -18,6 +18,7 @@ contract Aucijo is ERC20 {
     Counters.Counter private _auctionId;
     Counters.Counter private _memberId;
     Counters.Counter private _itemId;
+    Counters.Counter private _historyTransactionId;
  
     Auction[] auctions;
     mapping(address => Member) members;
@@ -77,6 +78,13 @@ contract Aucijo is ERC20 {
         members[auctions[id].currentKing].items.push(items[auctions[id].itemId]);
         auctions[id].status = AuctionStatus.CLOSED;
         itemIsAuction[auctions[id].itemId] = false;
+
+        HistoryTransaction memory historyTransactionOfSeller = HistoryTransaction(_historyTransactionId.current(),items[auctions[id].itemId].name,"sold",auctions[id].currentKing,block.timestamp);
+        members[auctions[id].owner].historyTransaction.push(historyTransactionOfSeller);
+        _historyTransactionId.increment();
+        HistoryTransaction memory historyTransactionOfPurcharser = HistoryTransaction(_historyTransactionId.current(),items[auctions[id].itemId].name,"buy",auctions[id].owner,block.timestamp);
+        members[auctions[id].currentKing].historyTransaction.push(historyTransactionOfPurcharser);
+        _historyTransactionId.increment();
         
     } 
     function revokeAuction(uint id) public mRegistered{
