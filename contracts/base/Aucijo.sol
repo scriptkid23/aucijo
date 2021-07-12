@@ -10,7 +10,7 @@ contract Aucijo is ERC20 {
         _mint(msg.sender, 0);
     }
     // address deploy smart contract and hold token in auction
-    address private StoreToken = 0xaefdf92622C243a246eC10AD9e1b218F0a0EF0C3;
+    address private StoreToken = 0x9285640D823eDd78aA24821031aC6499f37825C4;
     
     using Counters for Counters.Counter;
     using ArrayLib for Item[];
