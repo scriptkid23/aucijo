@@ -11,7 +11,8 @@ import {
 import { Link } from "react-router-dom";
 import CoinRechargeComponent from "../components/coin-recharge.component";
 import { connect } from "react-redux";
-function DashboardContainer({member}) {
+import moment from "moment";
+function DashboardContainer({ member }) {
   return (
     <div className="content">
       <Row>
@@ -20,7 +21,8 @@ function DashboardContainer({member}) {
             <CardHeader>
               <h5 className="card-category">Assets</h5>
               <CardTitle tag="h3">
-                <i className="tim-icons icon-app text-info" /> {member.items.length} items
+                <i className="tim-icons icon-app text-info" />{" "}
+                {member.items.length} items
               </CardTitle>
             </CardHeader>
             <CardBody>
@@ -33,7 +35,8 @@ function DashboardContainer({member}) {
             <CardHeader>
               <h5 className="card-category">Token</h5>
               <CardTitle tag="h3">
-                <i className="tim-icons icon-coins text-info" /> {member.tokens} SPT
+                <i className="tim-icons icon-coins text-info" /> {member.tokens}{" "}
+                SPT
               </CardTitle>
             </CardHeader>
             <CardBody>
@@ -52,14 +55,24 @@ function DashboardContainer({member}) {
               <div className="table-full-width table-responsive">
                 <Table>
                   <tbody>
-                    <tr>
-                      <td>
-                        <p className="title">Update the Documentation</p>
-                        <p className="text-muted">
-                          Dwuamish Head, Seattle, WA 8:47 AM
-                        </p>
-                      </td>
-                    </tr>
+                    {member.historyTransaction.map((value, index) => {
+                      return (
+                        <tr key={value.id}>
+                          <td>
+                            <p className="title">
+                              You {value.action} {value.itemName}
+                            </p>
+                            <p className="text-muted">
+                              You transaction with{" "}
+                              <span className="text-info">{value.dest}</span> at{" "}
+                              {moment
+                                .unix(value.createdAt)
+                                .format("DD/MM/YYYY h:mm A")}
+                            </p>
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </Table>
               </div>
@@ -71,9 +84,9 @@ function DashboardContainer({member}) {
   );
 }
 const mapStateToProps = (state) => {
-  console.log(state)
-  return({
+  console.log(state);
+  return {
     member: state.member,
-  })
-}
-export default connect(mapStateToProps)(DashboardContainer)
+  };
+};
+export default connect(mapStateToProps)(DashboardContainer);

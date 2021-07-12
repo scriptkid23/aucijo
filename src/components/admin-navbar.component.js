@@ -19,15 +19,17 @@ import {
   Modal,
   NavbarToggler,
   ModalHeader,
+  UncontrolledTooltip,
 } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import { ThemeContext, themes } from "../context/theme.context";
+import WrapperAlertComponent from "./wrapper-alert.component";
 
 function AdminNavbar(props) {
   const [collapseOpen, setcollapseOpen] = React.useState(false);
   const [modalSearch, setmodalSearch] = React.useState(false);
   const [color, setcolor] = React.useState("navbar-transparent");
-  const {changeTheme} = useContext(ThemeContext);
+  const { changeTheme } = useContext(ThemeContext);
   const history = useHistory();
   React.useEffect(() => {
     window.addEventListener("resize", updateColor);
@@ -54,12 +56,18 @@ function AdminNavbar(props) {
     setcollapseOpen(!collapseOpen);
   };
   // this function is to open the Search modal
-  const toggleModalSearch = () => {
-    setmodalSearch(!modalSearch);
+  const onRefresh = () => {
+    try {
+      props.refreshData();
+      props.setAlert("success","Refresh data succeeded");
+    } catch (error) {
+      props.setAlert("danger",error.message);
+    }
+    
   };
   const toggleTheme = () => {
     changeTheme(themes.light);
-  }
+  };
   return (
     <>
       <Navbar className={classNames("navbar-absolute", color)} expand="lg">
@@ -88,10 +96,21 @@ function AdminNavbar(props) {
           <Collapse navbar isOpen={collapseOpen}>
             <Nav className="ml-auto" navbar>
               <InputGroup className="search-bar">
-                <Button color="link" onClick={toggleModalSearch}>
-                  <i className="tim-icons icon-zoom-split" />
-                  <span className="d-lg-none d-md-block">Search</span>
+                <Button
+                  color="link"
+                  onClick={onRefresh}
+                  id="tooltip-refresh"
+                >
+                  <i className="tim-icons icon-refresh-01" />
+                  <span className="d-lg-none d-md-block">Refresh</span>
                 </Button>
+                <UncontrolledTooltip
+                  delay={0}
+                  target="tooltip-refresh"
+                  placement="bottom"
+                >
+                  Refresh
+                </UncontrolledTooltip>
               </InputGroup>
               <UncontrolledDropdown nav>
                 <DropdownToggle
@@ -152,13 +171,15 @@ function AdminNavbar(props) {
                   <NavLink tag="li">
                     <DropdownItem
                       className="nav-item"
-                      onClick={() => history.push('/home/profile')}
+                      onClick={() => history.push("/home/profile")}
                     >
                       Profile
                     </DropdownItem>
                   </NavLink>
                   <NavLink tag="li">
-                    <DropdownItem className="nav-item" onClick={toggleTheme}>Light theme</DropdownItem>
+                    <DropdownItem className="nav-item" onClick={toggleTheme}>
+                      Light theme
+                    </DropdownItem>
                   </NavLink>
                 </DropdownMenu>
               </UncontrolledDropdown>
@@ -167,25 +188,8 @@ function AdminNavbar(props) {
           </Collapse>
         </Container>
       </Navbar>
-      <Modal
-        modalClassName="modal-search"
-        isOpen={modalSearch}
-        toggle={toggleModalSearch}
-      >
-        <ModalHeader className='search-header'>
-          <Input className='w-100 font-weight-normal' placeholder="Search auction..." type="text"/>
-          <button
-            aria-label="Close"
-            className="close"
-
-            onClick={toggleModalSearch}
-          >
-            <i className="tim-icons icon-simple-remove" />
-          </button>
-        </ModalHeader>
-      </Modal>
     </>
   );
 }
 
-export default AdminNavbar;
+export default WrapperAlertComponent(AdminNavbar);

@@ -15,6 +15,7 @@ const defaultState = {
   phonenumber: "",
   _address: "",
   items: [],
+  historyTransaction:[],
 };
 const reducers = handleActions(
   {

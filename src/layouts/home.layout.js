@@ -119,6 +119,7 @@ function HomeLayout(props) {
                 brandText={getBrandText(location.pathname)}
                 toggleSidebar={toggleSidebar}
                 sidebarOpened={sidebarOpened}
+                refreshData = {fetchData}
               />
               <Switch>
                 {getRoutes(HomeRoute)}
