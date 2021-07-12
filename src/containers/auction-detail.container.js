@@ -35,7 +35,7 @@ function AuctionDetail({ methods, owner, auction, events, setAlert }) {
           becomeAt: event.returnValues.becomeAt,
         };
         logs.push(object);
-        setLog(logs);
+        setLog(logs.reverse());
         updateAuctionDetail(object);
       }
     );

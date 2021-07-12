@@ -133,7 +133,10 @@ contract Aucijo is ERC20 {
         require(auctions[id].start_time <= block.timestamp && auctions[id].end_time >= block.timestamp, 'Outside of auction time');
         require(auctions[id].owner != msg.sender,'You are the owner');
         require(auctions[id].price < price && members[msg.sender].tokens > price, 'You are not enought SPT');
-        if(auctions[id].owner != auctions[id].currentKing) _transfer(StoreToken, auctions[id].currentKing, auctions[id].price);
+        if(auctions[id].owner != auctions[id].currentKing) {
+            _transfer(StoreToken, auctions[id].currentKing, auctions[id].price);
+            members[auctions[id].currentKing].tokens = balanceOf(auctions[id].currentKing);
+        }
         auctions[id].price = price;
         auctions[id].currentKing = msg.sender;
         transfer(StoreToken, price);
