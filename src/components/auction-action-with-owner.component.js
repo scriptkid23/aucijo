@@ -10,7 +10,7 @@ export default function AuctionActionWithOwner({
 }) {
   const onAgree = async() => {
     try {
-      await methods.agree(itemId).call({from:owner, gas:GAS});
+      await methods.agree(itemId).send({from:owner, gas:GAS});
       setAlert('success','Transaction was succeeded');
     } catch (error) {
       setAlert('danger',error.message)
@@ -18,7 +18,7 @@ export default function AuctionActionWithOwner({
   }
   const onRevoke = async() => {
     try {
-      await methods.revokeAuction(itemId).call({from:owner, gas:GAS});
+      await methods.revokeAuction(itemId).send({from:owner, gas:GAS});
       setAlert('success','Revoke aution was succeeded');
     } catch (error) {
       setAlert('danger',error.message);
