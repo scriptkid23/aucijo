@@ -18,10 +18,11 @@ export default function AuctionActionWithGuest({
 }) {
   const bid = async (data) => {
     try {
-      await methods.bid(itemId, data.price).send({
+      await methods.bid(parseInt(itemId), parseInt(data.price)).send({
         from: owner,
         gas: GAS,
       });
+      setAlert('success','You bid: '+data.price+' SPT');
     } catch (error) {
       setAlert("danger", error.message);
     }
