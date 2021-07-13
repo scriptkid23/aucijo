@@ -22,7 +22,6 @@ export default function CreateAuctionComponent({ data, methods, owner }) {
   const onSubmit = async (value) => {
     if (startTime && endTime) {
       try {
-          console.log(owner);
         await methods
           .createAuction(
             value.name,

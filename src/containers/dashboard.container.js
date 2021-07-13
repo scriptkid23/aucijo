@@ -55,24 +55,27 @@ function DashboardContainer({ member }) {
               <div className="table-full-width table-responsive">
                 <Table>
                   <tbody>
-                    {member.historyTransaction.map((value, index) => {
-                      return (
-                        <tr key={value.id}>
-                          <td>
-                            <p className="title">
-                              You {value.action} {value.itemName}
-                            </p>
-                            <p className="text-muted">
-                              You transaction with{" "}
-                              <span className="text-info">{value.dest}</span> at{" "}
-                              {moment
-                                .unix(value.createdAt)
-                                .format("DD/MM/YYYY h:mm A")}
-                            </p>
-                          </td>
-                        </tr>
-                      );
-                    })}
+                    {member.historyTransaction
+                      .sort((a, b) => b.createdAt - a.createdAt)
+                      .map((value, index) => {
+                        return (
+                          <tr key={value.id}>
+                            <td>
+                              <p className="title">
+                                You {value.action} {value.itemName}
+                              </p>
+                              <p className="text-muted">
+                                You transaction with{" "}
+                                <span className="text-info">{value.dest}</span>{" "}
+                                at{" "}
+                                {moment
+                                  .unix(value.createdAt)
+                                  .format("DD/MM/YYYY h:mm A")}
+                              </p>
+                            </td>
+                          </tr>
+                        );
+                      })}
                   </tbody>
                 </Table>
               </div>
@@ -84,7 +87,6 @@ function DashboardContainer({ member }) {
   );
 }
 const mapStateToProps = (state) => {
-  console.log(state);
   return {
     member: state.member,
   };

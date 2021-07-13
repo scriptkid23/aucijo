@@ -12,5 +12,13 @@ function getRoutes(route) {
     )
   })
 }
-export { getRoutes }
+function convertArrayFromSolidity(arr){
+  let temp = [];
+  for(let key in arr){
+    let clone = Object.assign({}, arr[key]);
+        temp.push(clone);
+  }
+  return temp;
+}
+export { getRoutes , convertArrayFromSolidity}
 
