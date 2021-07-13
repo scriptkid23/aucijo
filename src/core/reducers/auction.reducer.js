@@ -20,7 +20,9 @@ const reducers = handleActions(
     [actions.fetchAuctionList]: (state, action) => {
       return {
         ...state,
-        auctions: convertArrayFromSolidity(action.payload),
+        auctions: convertArrayFromSolidity(action.payload).filter(
+          (value, index) => value.status == 1
+        ),
       };
     },
     [actions.updateAuction]: (state, action) => {

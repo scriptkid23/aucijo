@@ -24,7 +24,7 @@ function AuctionContainer({ auctions }) {
                   .sort((a, b) => b.id - a.id)
                   .map((value, index) => {
                     return (
-                      value.status == 1 && (
+                      (
                         <Col
                           className="font-icon-list col-xs-6 col-xs-6"
                           md="4"
