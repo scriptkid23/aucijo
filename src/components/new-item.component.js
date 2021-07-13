@@ -1,18 +1,22 @@
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
 import { Button, Form, FormGroup, Input, Modal, ModalBody } from "reactstrap";
 import { GAS } from "../helper/constant";
 export default function NewItemComponent({ methods, owner }) {
   const [modal, setModal] = useState(false);
   const toggle = () => setModal(!modal);
-  const { register, handleSubmit } = useForm();
-  const onSubmit = async (data) => {
+  const [name, setName] = useState("");
+  const onSubmit = async (e) => {
+    e.preventDefault();
     try {
-      await methods.addItem(data.name).send({
-        from: owner,
-        gas: GAS,
-      });
-      toggle();
+      if (name.length > 0) {
+        await methods.addItem(name).send({
+          from: owner,
+          gas: GAS,
+        });
+        toggle();
+      } else {
+        alert("Field name is empty");
+      }
     } catch (error) {
       alert(error.message);
     }
@@ -22,17 +26,26 @@ export default function NewItemComponent({ methods, owner }) {
       <Button color="primary" onClick={toggle}>
         New item
       </Button>
-      <Modal isOpen={modal} toggle={toggle}>
+      <Modal
+        isOpen={modal}
+        toggle={toggle}
+        modalClassName="modal-create-auction"
+      >
         <ModalBody>
-          <Form onSubmit={handleSubmit(onSubmit)}>
+          <Form onSubmit={onSubmit}>
             <FormGroup>
-              <label>Item name</label>
+              <label className="text-secondary">Name</label>
               <Input
+                type="text"
+                value={name}
                 placeholder="Type item name"
-                className="text-dark"
-                {...register("name", { required: true })}
+                onChange={(e) => setName(e.target.value)}
               />
             </FormGroup>
+
+            <Button color="primary" type="button" onClick={onSubmit}>
+              Create
+            </Button>
           </Form>
         </ModalBody>
       </Modal>

@@ -24,24 +24,30 @@ function AuctionContainer({ auctions }) {
                   .sort((a, b) => b.id - a.id)
                   .map((value, index) => {
                     return (
-                      <Col className="font-icon-list col-xs-6 col-xs-6" md="4">
-                        <div className="font-icon-detail">
-                          <i className="tim-icons icon-tag" />
-                          <p>
-                            ID: {value.id}
-                            <br />
-                            {value.name}
-                          </p>
+                      value.status == 1 && (
+                        <Col
+                          className="font-icon-list col-xs-6 col-xs-6"
+                          md="4"
+                          key={value.id}
+                        >
+                          <div className="font-icon-detail">
+                            <i className="tim-icons icon-tag" />
+                            <p>
+                              ID: {value.id}
+                              <br />
+                              {value.name}
+                            </p>
 
-                          <Button
-                            onClick={() =>
-                              history.push(`/home/auction/${value.id}`)
-                            }
-                          >
-                            Join
-                          </Button>
-                        </div>
-                      </Col>
+                            <Button
+                              onClick={() =>
+                                history.push(`/home/auction/${value.id}`)
+                              }
+                            >
+                              Join
+                            </Button>
+                          </div>
+                        </Col>
+                      )
                     );
                   })}
               </Row>
