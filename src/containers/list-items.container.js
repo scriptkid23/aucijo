@@ -1,12 +1,11 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { Button, Row, Col, Card, CardHeader, CardBody } from "reactstrap";
+import { Row, Col, Card,  CardBody } from "reactstrap";
 import { compose } from "redux";
 import CreateAuctionComponent from "../components/create-auction.component";
 import NewItemComponent from "../components/new-item.component";
 import WrapperDrizzleComponent from "../components/wrapper-drizzle.component";
-import WrapperLoadingComponent from "../components/wrapper-loading.component";
 import CustomHook from "../helper/hook";
 
 function ListItemsContainer({ setLoading, member, methods, owner, events }) {

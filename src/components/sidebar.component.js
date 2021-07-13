@@ -5,12 +5,10 @@ import { PropTypes } from "prop-types";
 import { Nav } from "reactstrap";
 import {
   BackgroundColorContext,
-  backgroundColors,
 } from "../context/background-color.context";
-import { HomeRoute } from "../router/router";
 
 function Sidebar(props) {
-  const { routes, rtlActive, logo } = props;
+  const { logo } = props;
   const location = useLocation();
   const activeRoute = (routeName) => {
     return location.pathname.indexOf(routeName) !== -1 ? "active" : "";

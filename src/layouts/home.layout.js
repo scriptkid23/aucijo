@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { BackgroundColorContext } from "../context/background-color.context";
 import PerfectScrollbar from "perfect-scrollbar";
 import { getRoutes } from "../helper/utils";
@@ -6,11 +6,11 @@ import { HomeRoute } from "../router/router";
 import Sidebar from "../components/sidebar.component";
 import AdminNavbar from "../components/admin-navbar.component";
 import logo from '../assets/img/spirity-logo.png';
-import { Switch, Redirect, useLocation, useHistory } from "react-router-dom";
+import { Switch, useLocation, useHistory } from "react-router-dom";
 import WrapperDrizzleComponent from "../components/wrapper-drizzle.component";
 import CustomHook from "../helper/hook";
 import { compose } from "redux";
-import WrapperLoadingComponent from "../components/wrapper-loading.component";
+
 
 var ps;
 function HomeLayout(props) {

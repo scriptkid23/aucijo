@@ -13,8 +13,6 @@ function CoinRechargeComponent({ methods, owner, member }) {
   const {
     register,
     handleSubmit,
-    watch,
-    formState: { errors },
   } = useForm();
   const { updateToken } = CustomHook();
   const toggle = () => setModal(!modal);

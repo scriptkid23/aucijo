@@ -9,16 +9,13 @@ import {
   DropdownMenu,
   DropdownItem,
   UncontrolledDropdown,
-  Input,
   InputGroup,
   NavbarBrand,
   Navbar,
   NavLink,
   Nav,
   Container,
-  Modal,
   NavbarToggler,
-  ModalHeader,
   UncontrolledTooltip,
 } from "reactstrap";
 import { useHistory } from "react-router-dom";
@@ -27,7 +24,6 @@ import WrapperAlertComponent from "./wrapper-alert.component";
 
 function AdminNavbar(props) {
   const [collapseOpen, setcollapseOpen] = React.useState(false);
-  const [modalSearch, setmodalSearch] = React.useState(false);
   const [color, setcolor] = React.useState("navbar-transparent");
   const { changeTheme } = useContext(ThemeContext);
   const history = useHistory();

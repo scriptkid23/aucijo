@@ -11,7 +11,6 @@ import {
   Alert,
 } from "reactstrap";
 import { useForm } from "react-hook-form";
-import WrapperLoadingComponent from "../components/wrapper-loading.component";
 import { GAS } from "../helper/constant";
 import WrapperDrizzleComponent from "../components/wrapper-drizzle.component";
 import { useHistory } from "react-router-dom";
@@ -22,7 +21,6 @@ function RegisterContainer({ methods, owner, setAlert }) {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm();
   const history = useHistory();
