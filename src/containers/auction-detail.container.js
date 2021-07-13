@@ -9,19 +9,27 @@ import AuctionActionWithGuest from "../components/auction-action-with-guest.comp
 import WrapperAlertComponent from "../components/wrapper-alert.component";
 import WrapperDrizzleComponent from "../components/wrapper-drizzle.component";
 import CustomHook from "../helper/hook";
+import _ from 'lodash';
 
 function AuctionDetail({ methods, owner, auction, events, setAlert }) {
   const history = useHistory();
   const { id } = useParams();
   const [logs, setLog] = useState([]);
   const { fetchAuctionDetail, updateAuctionDetail } = CustomHook();
+  const [item, setItem] = useState(null);
   const goBack = () => {
     history.goBack();
   };
   const getAuctionDetail = async (id) => {
     const data = await methods.findAuctionById(id).call({ from: owner });
-    fetchAuctionDetail(data);
+    if(data){
+      const itemDetail = await methods.findItemById(id).call({from: owner});
+      setItem(Object.assign({},itemDetail));
+      fetchAuctionDetail(data);
+    }
+    
   };
+  
   React.useEffect(() => {
     getAuctionDetail(id);
     events.BecomeKing(
@@ -69,7 +77,7 @@ function AuctionDetail({ methods, owner, auction, events, setAlert }) {
                     />
                     <h5 className="title">Price {auction.price} SPT</h5>
                   </a>
-                  <p className="description">{auction.name}</p>
+                  <p className="description">{item && _.capitalize(item.name)}</p>
                 </div>
                 <div className="card-description text-center">
                   {auction.description}
@@ -121,6 +129,9 @@ function AuctionDetail({ methods, owner, auction, events, setAlert }) {
                       .unix(auction.end_time)
                       .format("MMMM Do YYYY, h:mm:ss A")}
                   </span>
+                </div>
+                <div>
+                  Owner address: <span className="text-info">{item && item.owner}</span>
                 </div>
               </CardHeader>
               <CardBody>
