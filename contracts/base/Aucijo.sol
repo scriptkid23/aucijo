@@ -6,11 +6,13 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import {ArrayLib} from "./Utils.sol";
 import "./Schemas.sol";
 contract Aucijo is ERC20 {
+    address private StoreToken;
     constructor() ERC20("Spirity Token", "SPT") {
         _mint(msg.sender, 0);
+        StoreToken = msg.sender;
     }
     // address deploy smart contract and hold token in auction
-    address private StoreToken = 0x9285640D823eDd78aA24821031aC6499f37825C4;
+    // address private StoreToken = 0x9285640D823eDd78aA24821031aC6499f37825C4;
     
     using Counters for Counters.Counter;
     using ArrayLib for Item[];
