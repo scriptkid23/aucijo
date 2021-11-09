@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-
 import { Modal, Form, Input, ModalHeader } from "reactstrap";
 import { useForm } from "react-hook-form";
 import WrapperDrizzleComponent from "./wrapper-drizzle.component";
@@ -17,14 +16,16 @@ function CoinRechargeComponent({ methods, owner, member }) {
   const { updateToken } = CustomHook();
   const toggle = () => setModal(!modal);
   const onCoinRecharge = async (data) => {
+    console.log(data);
     try {
-      await methods.coinCharge(data.coin).send({
+      await methods.coinCharge().send({
         from: owner,
         gas: GAS,
+        value:data.coin,
       });
-      updateToken(parseInt(member.tokens) + parseInt(data.coin / 10000));
+      // updateToken(parseInt(member.tokens) + parseInt(data.coin * 100));
     } catch (error) {
-      alert(error.message);
+      console.log(error)
     }
   };
   return (
@@ -40,8 +41,7 @@ function CoinRechargeComponent({ methods, owner, member }) {
               placeholder="Type coin value is Multiples of 10000"
               {...register("coin", {
                 required: true,
-                min: 10000,
-                validate: (value) => value % 10000 === 0,
+                validate: (value) => value > 0,
               })}
               type="number"
             />
