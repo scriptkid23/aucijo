@@ -157,11 +157,12 @@ contract Aucijo is ERC20 {
         return block.timestamp;
     }
     function coinCharge() public payable mRegistered{
-        (bool sent,) = address(msg.sender).call{value: msg.value}("");
+        (bool sent,) = address(this).call{value: msg.value}("");
         require(sent, "Failed to send Ether");
         _mint(msg.sender, msg.value * 100); // 1 ETH = 100 SPT
         members[msg.sender].tokens = balanceOf(msg.sender);
     }
+    receive() external payable {}
     
     
 }

@@ -5,6 +5,7 @@ import WrapperDrizzleComponent from "./wrapper-drizzle.component";
 import { GAS } from "../helper/constant";
 import CustomHook from "../helper/hook";
 import { compose } from "redux";
+import BN from 'bn.js'
 import WrapperAlertComponent from "./wrapper-alert.component";
 import { connect } from "react-redux";
 function CoinRechargeComponent({ methods, owner, member }) {
@@ -16,16 +17,15 @@ function CoinRechargeComponent({ methods, owner, member }) {
   const { updateToken } = CustomHook();
   const toggle = () => setModal(!modal);
   const onCoinRecharge = async (data) => {
-    console.log(data);
     try {
       await methods.coinCharge().send({
         from: owner,
         gas: GAS,
-        value:data.coin,
+        value: Math.pow(10,18) * data.coin,
       });
       // updateToken(parseInt(member.tokens) + parseInt(data.coin * 100));
     } catch (error) {
-      console.log(error)
+      alert(error.message);
     }
   };
   return (
