@@ -1,3 +1,9 @@
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  src: url('./assets/fonts/poppins/Poppins-Regular.ttf')
+}
 .pointer {
   cursor: pointer;
 }
