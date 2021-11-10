@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, Form, Input, ModalHeader } from "reactstrap";
+import { Modal, Form, Input, ModalHeader, ModalBody, FormGroup, Button, InputGroup, ButtonDropdown, DropdownToggle } from "reactstrap";
 import { useForm } from "react-hook-form";
 import WrapperDrizzleComponent from "./wrapper-drizzle.component";
 import { GAS } from "../helper/constant";
@@ -10,20 +10,25 @@ import WrapperAlertComponent from "./wrapper-alert.component";
 import { connect } from "react-redux";
 function CoinRechargeComponent({ methods, owner, member }) {
   const [modal, setModal] = useState(false);
+  const [value, setValue] = useState(null);
+  const [unit, setUnit] = useState(1);
   const {
     register,
     handleSubmit,
   } = useForm();
   const { updateToken } = CustomHook();
   const toggle = () => setModal(!modal);
-  const onCoinRecharge = async (data) => {
+  const onCoinRecharge = async () => {
+    let coin = parseFloat(unit) * parseFloat(value);
+    console.log(coin);
     try {
       await methods.coinCharge().send({
         from: owner,
         gas: GAS,
-        value: Math.pow(10,18) * data.coin,
+        value: coin,
       });
-      // updateToken(parseInt(member.tokens) + parseInt(data.coin * 100));
+      updateToken(parseFloat(member.tokens) + coin*100);
+      setModal(false);
     } catch (error) {
       alert(error.message);
     }
@@ -33,24 +38,42 @@ function CoinRechargeComponent({ methods, owner, member }) {
       <span className="text-info pointer" onClick={toggle}>
         Coin recharge
       </span>
-      <Modal modalClassName="modal-search" isOpen={modal} toggle={toggle}>
-        <ModalHeader className="search-header">
+      <Modal isOpen={modal} toggle={toggle} modalClassName="modal-create-auction">
+        {/* <ModalHeader className="search-header">
           <Form onSubmit={handleSubmit(onCoinRecharge)}>
             <Input
               className="w-100 font-weight-normal text-dark"
-              placeholder="Type coin value is Multiples of 10000"
-              {...register("coin", {
-                required: true,
-                validate: (value) => value > 0,
-              })}
-              type="number"
+              placeholder="type the amount of ETH you want to transfer"
+              {...register("coin")}
+              type="text"
             />
           </Form>
 
           <button aria-label="Close" className="close" onClick={toggle}>
             <i className="tim-icons icon-simple-remove" />
           </button>
-        </ModalHeader>
+        </ModalHeader> */}
+        <ModalBody>
+          <Form>
+          <FormGroup>
+              <label className="text-secondary">Ether</label>
+              <InputGroup>
+
+                <Input onChange={e => setValue(e.target.value)} placeholder="value" type="text"/>
+                <Input type="select" value={unit} onChange={e => setUnit(e.target.value)}>
+                  <option value={Math.pow(10,18)}>Ether</option>
+                  <option value={Math.pow(10,9)}>Gwei</option>
+                  <option value={1}>Wei</option>
+                </Input>
+              </InputGroup>
+              
+             
+            </FormGroup>
+            <Button color="primary" type="button" onClick={onCoinRecharge}>
+              Charge
+            </Button>
+          </Form>
+        </ModalBody>
       </Modal>
     </React.Fragment>
   );

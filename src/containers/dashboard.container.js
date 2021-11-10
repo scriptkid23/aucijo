@@ -35,7 +35,7 @@ function DashboardContainer({ member }) {
             <CardHeader>
               <h5 className="card-category">Token</h5>
               <CardTitle tag="h3">
-                <i className="tim-icons icon-coins text-info" /> {member.tokens}{" "}
+                <i className="tim-icons icon-coins text-info" /> {member.tokens/Math.pow(10,18).toFixed(18)}{" "}
                 SPT
               </CardTitle>
             </CardHeader>
