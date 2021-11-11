@@ -34,11 +34,11 @@ export default function NewItemComponent({ methods, owner }) {
         <ModalBody>
           <Form onSubmit={onSubmit}>
             <FormGroup>
-              <label className="text-secondary">Name</label>
+              <label className="text-secondary">Item Address</label>
               <Input
                 type="text"
                 value={name}
-                placeholder="Type item name"
+                placeholder="0x1190abcdE0402D71aF957471BF9F71e5f406cf49"
                 onChange={(e) => setName(e.target.value)}
               />
             </FormGroup>

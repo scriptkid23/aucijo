@@ -1,4 +1,3 @@
-// contracts/MyToken.sol
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
@@ -7,9 +6,11 @@ import {ArrayLib} from "./Utils.sol";
 import "./Schemas.sol";
 contract Aucijo is ERC20 {
     address private StoreToken;
+    uint256 private rate;
     constructor() ERC20("Spirity Token", "SPT") {
         _mint(msg.sender, 0);
-        StoreToken = msg.sender;
+        StoreToken  = msg.sender;
+        rate        = 1000;
     }
     // address deploy smart contract and hold token in auction
     // address private StoreToken = 0x9285640D823eDd78aA24821031aC6499f37825C4;
@@ -159,8 +160,16 @@ contract Aucijo is ERC20 {
     function coinCharge() public payable mRegistered{
         (bool sent,) = address(this).call{value: msg.value}("");
         require(sent, "Failed to send Ether");
-        _mint(msg.sender, msg.value * 100); // 1 ETH = 100 SPT
+        _mint(msg.sender, msg.value * rate); // 1 ETH = rate *  SPT
         members[msg.sender].tokens = balanceOf(msg.sender);
+    }
+    function withdrawal(uint256 value, uint256 decimal) public payable mRegistered {
+        uint256 coin = value * (10 ** (18 - decimal));
+        require(members[msg.sender].tokens >= coin,'amount of tokens exceeded');
+        (bool sent,) = address(msg.sender).call{value:coin / rate}("");
+        require(sent, "Failed to withdrawal Ether");
+        members[msg.sender].tokens = members[msg.sender].tokens - coin;
+        transfer(StoreToken, coin);
     }
     receive() external payable {}
     

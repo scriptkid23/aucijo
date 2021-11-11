@@ -12,7 +12,9 @@ import { Link } from "react-router-dom";
 import CoinRechargeComponent from "../components/coin-recharge.component";
 import { connect } from "react-redux";
 import moment from "moment";
+import WithdrawalComponent from "../components/withdrawal.component";
 function DashboardContainer({ member }) {
+  console.log(member.tokens)
   return (
     <div className="content">
       <Row>
@@ -41,6 +43,7 @@ function DashboardContainer({ member }) {
             </CardHeader>
             <CardBody>
               <CoinRechargeComponent />
+              <WithdrawalComponent/>
             </CardBody>
           </Card>
         </Col>
