@@ -91,7 +91,18 @@ function Sidebar(props) {
                   onClick={props.toggleSidebar}
                 >
                   <i className={"tim-icons icon-cart"} />
-                  <p>auction</p>
+                  <p>Auction</p>
+                </NavLink>
+              </li>
+              <li className={activeRoute("/home/market")}>
+                <NavLink
+                  to={"/home/market"}
+                  className="nav-link"
+                  activeClassName="active"
+                  onClick={props.toggleSidebar}
+                >
+                  <i className={"tim-icons icon-atom"} />
+                  <p>Market</p>
                 </NavLink>
               </li>
             </Nav>

@@ -203,3 +203,12 @@
 .modal-create-auction > .modal-dialog > .modal-content{
   background-color: #27293d;
 }
+.market-container {
+  height: calc(100vh - 90px);
+}
+.font-size-15{
+  font-size: 15px !important;
+}
+.font-size-13{
+  font-size: 13px !important;
+}

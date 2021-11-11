@@ -3,6 +3,7 @@ import AuctionContainer from "../containers/auction.container";
 import DashboardContainer from "../containers/dashboard.container";
 import ListItemsContainer from "../containers/list-items.container";
 import LoginContainer from "../containers/login.container";
+import MarketContainer from "../containers/market.container";
 import ProfileContainer from "../containers/profile.container";
 import RegisterContainer from "../containers/register.container";
 import Tables from "../containers/test.container";
@@ -57,4 +58,10 @@ export const HomeRoute = [
     icon: "tim-icons icon-vector",
     component: Tables,
   },
+  {
+    path:"/home/market",
+    name: "market",
+    icon: "tim-icons icon-cart",
+    component: MarketContainer,
+  }
 ];
