@@ -2,14 +2,18 @@
 pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol";
 import {ArrayLib} from "./Utils.sol";
+
 import "./Schemas.sol";
 contract Aucijo is ERC20 {
-    address private StoreToken;
-    uint256 private rate;
-    constructor() ERC20("Spirity Token", "SPT") {
+    address         private StoreToken;
+    uint256         private rate;
+    IERC721Metadata private SpiMarketAddress;
+    constructor(address marketAddress) ERC20("Spirity Token", "SPT") {
         _mint(msg.sender, 0);
         StoreToken  = msg.sender;
+        SpiMarketAddress = IERC721Metadata(marketAddress);
         rate        = 1000;
     }
     // address deploy smart contract and hold token in auction
@@ -20,7 +24,6 @@ contract Aucijo is ERC20 {
     
     Counters.Counter private _auctionId;
     Counters.Counter private _memberId;
-    Counters.Counter private _itemId;
     Counters.Counter private _historyTransactionId;
  
     Auction[] auctions;
@@ -58,15 +61,15 @@ contract Aucijo is ERC20 {
     function getProfile() public view mRegistered returns(Member memory){
         return members[msg.sender];
     }
-    function addItem(string memory name) public mRegistered{
-        Item storage item = items[_itemId.current()];
-        item.name = name;
+    function addItem(uint256 _tokenId) public mRegistered{
+        require(SpiMarketAddress.ownerOf(_tokenId) == msg.sender,"You don't own this item");
+        Item storage item = items[_tokenId];
+        item.content = SpiMarketAddress.tokenURI(_tokenId);
         item.owner = msg.sender;
-        item.id = _itemId.current();
-        itemExist[_itemId.current()] = true;
+        item.id = _tokenId;
+        itemExist[_tokenId] = true;
         members[msg.sender].items.push(item);
-        emit AddItem(msg.sender, _itemId.current(), name);
-        _itemId.increment();
+        emit AddItem(msg.sender, _tokenId, item.content);
     }
 
     function agree(uint id) public mRegistered{
@@ -83,13 +86,16 @@ contract Aucijo is ERC20 {
         members[auctions[id].currentKing].items.push(items[auctions[id].itemId]);
         auctions[id].status = AuctionStatus.CLOSED;
         itemIsAuction[auctions[id].itemId] = false;
-
-        HistoryTransaction memory historyTransactionOfSeller = HistoryTransaction(_historyTransactionId.current(),items[auctions[id].itemId].name,"sold",auctions[id].currentKing,block.timestamp);
+        // insert history transaction
+        HistoryTransaction memory historyTransactionOfSeller = HistoryTransaction(_historyTransactionId.current(),items[auctions[id].itemId].content,"sold",auctions[id].currentKing,block.timestamp);
         members[auctions[id].owner].historyTransaction.push(historyTransactionOfSeller);
         _historyTransactionId.increment();
-        HistoryTransaction memory historyTransactionOfPurcharser = HistoryTransaction(_historyTransactionId.current(),items[auctions[id].itemId].name,"buy",auctions[id].owner,block.timestamp);
+        HistoryTransaction memory historyTransactionOfPurcharser = HistoryTransaction(_historyTransactionId.current(),items[auctions[id].itemId].content,"buy",auctions[id].owner,block.timestamp);
         members[auctions[id].currentKing].historyTransaction.push(historyTransactionOfPurcharser);
         _historyTransactionId.increment();
+        // processing for SpiMarket
+        SpiMarketAddress.approve(auctions[id].currentKing, auctions[id].itemId);
+        SpiMarketAddress.transferFrom(auctions[id].owner, auctions[id].currentKing, auctions[id].itemId);
         
     } 
     function revokeAuction(uint id) public mRegistered{

@@ -17,7 +17,7 @@ struct Member {
     }
 struct Item {
         uint id;
-        string name;
+        string content;
         address owner;
     }
 struct Auction {
