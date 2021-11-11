@@ -17,7 +17,6 @@ export default class Wheel extends React.Component {
         this.props.onSelectItem(selectedItem);
       }
       this.setState({ selectedItem });
-      
     } else {
       this.setState({ selectedItem: null });
       setTimeout(this.selectItem, 500);
@@ -33,13 +32,12 @@ export default class Wheel extends React.Component {
       '--selected-item': selectedItem,
     };
     const spinning = selectedItem !== null ? 'spinning' : '';
-
     return (
       <div className="wheel-container">
         <div className={`wheel ${spinning}`} style={wheelVars} onClick={this.selectItem}>
           {items.map((item, index) => (
             <div className="wheel-item" key={index} style={{ '--item-nb': index }}>
-              {item}
+              {item.name}
             </div>
           ))}
         </div>
