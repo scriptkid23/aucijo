@@ -10,11 +10,13 @@ contract Aucijo is ERC20 {
     address         private StoreToken;
     uint256         private rate;
     IERC721Metadata private SpiMarketAddress;
+    address         public  spiMarketAddress;
     constructor(address marketAddress) ERC20("Spirity Token", "SPT") {
         _mint(msg.sender, 0);
         StoreToken  = msg.sender;
         SpiMarketAddress = IERC721Metadata(marketAddress);
         rate        = 1000;
+        spiMarketAddress = marketAddress;
     }
     // address deploy smart contract and hold token in auction
     // address private StoreToken = 0x9285640D823eDd78aA24821031aC6499f37825C4;
