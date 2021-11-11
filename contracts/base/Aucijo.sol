@@ -38,7 +38,9 @@ contract Aucijo is ERC20 {
     event AddItem(address indexed _from, uint _id, string _value);
     event AddAuction(uint id, string name,uint itemId,  string description, uint price, AuctionStatus status, uint start_time, uint end_time);
     event BecomeKing(uint indexed id, address currentKing, uint price, uint becomeAt);
-    
+    event CoinCharge(address indexed owner, uint256 value);
+    event Withdrawal(address indexed owner, uint256 value);
+
     function registerMember(string memory firstname, string memory lastname, string memory email, string memory _address, string memory phonenumber) public {
         require(!registered[msg.sender],'Member was registered!');
         Member storage member = members[msg.sender];
@@ -162,6 +164,9 @@ contract Aucijo is ERC20 {
         require(sent, "Failed to send Ether");
         _mint(msg.sender, msg.value * rate); // 1 ETH = rate *  SPT
         members[msg.sender].tokens = balanceOf(msg.sender);
+        HistoryTransaction memory historyTransactionOfCharge = HistoryTransaction(_historyTransactionId.current(),"SPT","charge",address(this),block.timestamp);
+        members[msg.sender].historyTransaction.push(historyTransactionOfCharge);
+        emit CoinCharge(msg.sender, members[msg.sender].tokens);
     }
     function withdrawal(uint256 value, uint256 decimal) public payable mRegistered {
         uint256 coin = value * (10 ** (18 - decimal));
@@ -170,6 +175,9 @@ contract Aucijo is ERC20 {
         require(sent, "Failed to withdrawal Ether");
         members[msg.sender].tokens = members[msg.sender].tokens - coin;
         transfer(StoreToken, coin);
+        HistoryTransaction memory historyTransactionOfWithdrawal = HistoryTransaction(_historyTransactionId.current(),"SPT","withdrawal",address(this),block.timestamp);
+        members[msg.sender].historyTransaction.push(historyTransactionOfWithdrawal);
+        emit Withdrawal(msg.sender, members[msg.sender].tokens);
     }
     receive() external payable {}
     

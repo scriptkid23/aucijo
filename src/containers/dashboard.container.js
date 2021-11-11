@@ -13,8 +13,30 @@ import CoinRechargeComponent from "../components/coin-recharge.component";
 import { connect } from "react-redux";
 import moment from "moment";
 import WithdrawalComponent from "../components/withdrawal.component";
-function DashboardContainer({ member }) {
-  console.log(member.tokens)
+import { compose } from "redux";
+import WrapperDrizzleComponent from "../components/wrapper-drizzle.component";
+import WrapperAlertComponent from "../components/wrapper-alert.component";
+import CustomHook from "../helper/hook";
+function DashboardContainer({ member,events }) {
+  const {updateToken} = CustomHook()
+  React.useEffect(() => {
+    events.CoinCharge(
+      {
+        filter: { owner: localStorage.getItem('address') },
+      },
+      (err, event) => {
+        updateToken(event.returnValues.value);
+      }
+    );
+    events.Withdrawal(
+      {
+        filter: { owner: localStorage.getItem('address') },
+      },
+      (err, event) => {
+        updateToken(event.returnValues.value);
+      }
+    );
+  },[])
   return (
     <div className="content">
       <Row>
@@ -90,8 +112,13 @@ function DashboardContainer({ member }) {
   );
 }
 const mapStateToProps = (state) => {
+  console.log(state);
   return {
     member: state.member,
   };
 };
-export default connect(mapStateToProps)(DashboardContainer);
+const composeDashboardContainer = compose(
+  WrapperDrizzleComponent,
+  WrapperAlertComponent,
+)(DashboardContainer);
+export default connect(mapStateToProps)(composeDashboardContainer);
