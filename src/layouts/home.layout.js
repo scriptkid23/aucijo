@@ -16,7 +16,7 @@ var ps;
 function HomeLayout(props) {
   const location = useLocation();
   const history = useHistory();
-  const {fetchMemberDetail, fetchAuctionList, updateAuction} = CustomHook();
+  const {fetchMemberDetail, fetchAuctionList, updateAuction, updateItem, updateToken} = CustomHook();
   const mainPanelRef = React.useRef(null);
   const [sidebarOpened, setsidebarOpened] = React.useState(
     document.documentElement.className.indexOf("nav-open") !== -1
@@ -88,9 +88,38 @@ function HomeLayout(props) {
   React.useEffect(() => {
     // checkRegistered();
     fetchData();
-    props.events.AddAuction({},(err, event) => {
-      updateAuction(event.returnValues);
-    })
+    props.events.CoinCharge(
+      {
+        filter: { owner: localStorage.getItem('address') },
+        fromBlock:'latest'
+      },
+      (err, event) => {
+        updateToken(event.returnValues.value);
+      }
+    );
+    props.events.Withdrawal(
+      {
+        filter: { owner: localStorage.getItem('address') },
+        fromBlock:'latest'
+      },
+      (err, event) => {
+        updateToken(event.returnValues.value);
+      }
+    );
+    props.events.AddItem(
+      {
+        filter: { _from: localStorage.getItem('address')},
+        fromBlock:'latest'
+      },
+      (err, event) => {
+        let newItem = {
+          id: event.returnValues._id,
+          content: event.returnValues._value,
+          owner: event.returnValues._from,
+        };
+        updateItem(newItem);
+      }
+    );
     window.ethereum.on("accountsChanged", (data) => {
       if(data.length === 0){
         localStorage.clear();

@@ -18,26 +18,7 @@ import WrapperDrizzleComponent from "../components/wrapper-drizzle.component";
 import WrapperAlertComponent from "../components/wrapper-alert.component";
 import CustomHook from "../helper/hook";
 import { convertSPT } from "../helper/utils";
-function DashboardContainer({ member,events }) {
-  const {updateToken} = CustomHook()
-  React.useEffect(() => {
-    events.CoinCharge(
-      {
-        filter: { owner: localStorage.getItem('address') },
-      },
-      (err, event) => {
-        updateToken(event.returnValues.value);
-      }
-    );
-    events.Withdrawal(
-      {
-        filter: { owner: localStorage.getItem('address') },
-      },
-      (err, event) => {
-        updateToken(event.returnValues.value);
-      }
-    );
-  },[])
+function DashboardContainer({ member }) {
   return (
     <div className="content">
       <Row>

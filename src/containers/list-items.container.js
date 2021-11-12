@@ -8,28 +8,11 @@ import NewItemComponent from "../components/new-item.component";
 import WrapperDrizzleComponent from "../components/wrapper-drizzle.component";
 import CustomHook from "../helper/hook";
 
-function ListItemsContainer({ setLoading, member, methods, owner, events, aucijoAddress, spimarketAddress, methodsMarket }) {
+function ListItemsContainer({member, methods, owner, aucijoAddress, spimarketAddress, methodsMarket }) {
   const history = useHistory();
   const goBack = () => {
     history.goBack();
   };
-  const { updateItem } = CustomHook();
-  useEffect(() => {
-    events.AddItem(
-      {
-        filter: { _from: owner },
-        fromBlock:'latest'
-      },
-      (err, event) => {
-        let newItem = {
-          id: event.returnValues._id,
-          content: event.returnValues._value,
-          owner: event.returnValues._from,
-        };
-        updateItem(newItem);
-      }
-    );
-  }, []);
   return (
     <div className="content">
       <div className="d-flex align-items-center justify-content-between">
