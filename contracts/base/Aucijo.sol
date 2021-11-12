@@ -9,14 +9,10 @@ import "./Schemas.sol";
 contract Aucijo is ERC20 {
     address         private StoreToken;
     uint256         private rate;
-    IERC721Metadata private SpiMarketAddress;
-    address         public  spiMarketAddress;
-    constructor(address marketAddress) ERC20("Spirity Token", "SPT") {
+    constructor() ERC20("Spirity Token", "SPT") {
         _mint(msg.sender, 0);
         StoreToken  = msg.sender;
-        SpiMarketAddress = IERC721Metadata(marketAddress);
         rate        = 1000;
-        spiMarketAddress = marketAddress;
     }
     // address deploy smart contract and hold token in auction
     // address private StoreToken = 0x9285640D823eDd78aA24821031aC6499f37825C4;
@@ -63,12 +59,17 @@ contract Aucijo is ERC20 {
     function getProfile() public view mRegistered returns(Member memory){
         return members[msg.sender];
     }
-    function addItem(uint256 _tokenId) public mRegistered{
-        require(SpiMarketAddress.ownerOf(_tokenId) == msg.sender,"You don't own this item");
+    /**
+        @param _tokenId: token id
+        @param _NFTStoreAddress: address of Smartcontract defined token  
+     */
+    function addItem(uint256 _tokenId, address _NFTStoreAddress) public mRegistered{
+        require(IERC721Metadata(_NFTStoreAddress).ownerOf(_tokenId) == msg.sender,"You don't own this item");
         Item storage item = items[_tokenId];
-        item.content = SpiMarketAddress.tokenURI(_tokenId);
+        item.content = IERC721Metadata(_NFTStoreAddress).tokenURI(_tokenId);
         item.owner = msg.sender;
         item.id = _tokenId;
+        item.factory = _NFTStoreAddress;
         itemExist[_tokenId] = true;
         members[msg.sender].items.push(item);
         emit AddItem(msg.sender, _tokenId, item.content);
@@ -96,8 +97,8 @@ contract Aucijo is ERC20 {
         members[auctions[id].currentKing].historyTransaction.push(historyTransactionOfPurcharser);
         _historyTransactionId.increment();
         // processing for SpiMarket
-        SpiMarketAddress.approve(auctions[id].currentKing, auctions[id].itemId);
-        SpiMarketAddress.transferFrom(auctions[id].owner, auctions[id].currentKing, auctions[id].itemId);
+        IERC721Metadata(items[auctions[id].itemId].factory).approve(auctions[id].currentKing, auctions[id].itemId);
+        IERC721Metadata(items[auctions[id].itemId].factory).transferFrom(auctions[id].owner, auctions[id].currentKing, auctions[id].itemId);
         
     } 
     function revokeAuction(uint id) public mRegistered{

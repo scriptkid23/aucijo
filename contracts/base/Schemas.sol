@@ -19,6 +19,7 @@ struct Item {
         uint id;
         string content;
         address owner;
+        address factory;
     }
 struct Auction {
         uint id;
