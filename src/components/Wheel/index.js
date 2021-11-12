@@ -11,17 +11,24 @@ export default class Wheel extends React.Component {
   }
 
   selectItem = () => {
-    if (this.state.selectedItem === null) {
-      const selectedItem = Math.floor(Math.random() * this.props.items.length);
-      if (this.props.onSelectItem) {
-        this.props.onSelectItem(selectedItem);
+    if(!this.props.turn){
+        if (this.state.selectedItem === null) {
+          const selectedItem = Math.floor(Math.random() * this.props.items.length);
+          if (this.props.onSelectItem) {
+            this.props.onSelectItem(selectedItem);
+          }
+          this.setState({ selectedItem });
+        } else {
+          this.setState({ selectedItem: null });
+          setTimeout(this.selectItem, 500);
+        }
       }
-      this.setState({ selectedItem });
-    } else {
-      this.setState({ selectedItem: null });
-      setTimeout(this.selectItem, 500);
+      else{
+        this.props.setAlert("danger","Your turn is over");
+      }
     }
-  }
+   
+   
 
   render() {
     const { selectedItem } = this.state;
