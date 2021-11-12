@@ -4,12 +4,13 @@ import { GAS } from "../helper/constant";
 export default function NewItemComponent({ methods, owner }) {
   const [modal, setModal] = useState(false);
   const toggle = () => setModal(!modal);
-  const [name, setName] = useState("");
+  const [id, setId] = useState("");
+  const [address, setAddress] = useState("");
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (name.length > 0) {
-        await methods.addItem(name).send({
+      if (address.length > 0 && id.length > 0) {
+        await methods.addItem(id, address).send({
           from: owner,
           gas: GAS,
         });
@@ -34,12 +35,21 @@ export default function NewItemComponent({ methods, owner }) {
         <ModalBody>
           <Form onSubmit={onSubmit}>
             <FormGroup>
-              <label className="text-secondary">Item Address</label>
+              <label className="text-secondary">Store Address</label>
               <Input
                 type="text"
-                value={name}
+                value={address}
                 placeholder="0x1190abcdE0402D71aF957471BF9F71e5f406cf49"
-                onChange={(e) => setName(e.target.value)}
+                onChange={(e) => setAddress(e.target.value)}
+              />
+            </FormGroup>
+            <FormGroup>
+              <label className="text-secondary">Token ID</label>
+              <Input
+                type="number"
+                value={id}
+                placeholder="0"
+                onChange={(e) => setId(e.target.value)}
               />
             </FormGroup>
 

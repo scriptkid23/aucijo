@@ -25,4 +25,10 @@ contract SpiMarket is ERC721URIStorage{
         client[msg.sender].push(newItemId);
         emit AwardRecipient(msg.sender, newItemId);
     }
+    function getWasSpin() public view returns(bool) {
+        return wasSpin[msg.sender];
+    }
+    function getAddressContract() public view returns(address){
+        return address(this);
+    }
 }

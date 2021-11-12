@@ -2,7 +2,7 @@ import rootSaga from "./sagas/root.saga";
 import createSagaMiddleware from "redux-saga";
 import { createLogger } from "redux-logger";
 import { Drizzle, generateStore } from "@drizzle/store";
-import {options} from "../helper/constant";
+import {options} from "../helper/configuration";
 import { AuctionReducer, MemberReducer } from "./reducers";
 
 
