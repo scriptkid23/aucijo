@@ -7,6 +7,7 @@ import CreateAuctionComponent from "../components/create-auction.component";
 import NewItemComponent from "../components/new-item.component";
 import WrapperDrizzleComponent from "../components/wrapper-drizzle.component";
 import CustomHook from "../helper/hook";
+import { parseContent } from "../helper/utils";
 
 function ListItemsContainer({member, methods, owner, aucijoAddress, spimarketAddress, methodsMarket }) {
   const history = useHistory();
@@ -38,7 +39,7 @@ function ListItemsContainer({member, methods, owner, aucijoAddress, spimarketAdd
                       <p>
                         ID: {value.id}
                         <br />
-                        {value.content}
+                        {parseContent(value.content)}
                       </p>
 
                       <CreateAuctionComponent

@@ -33,5 +33,15 @@ function convertToDecimal(value){
 function convertSPT(value){
   return value/Math.pow(10,18).toFixed(18);
 }
-export { getRoutes , convertArrayFromSolidity, convertToDecimal, convertSPT}
+function parseContent(value){
+
+  const star = "⭐";
+  const data = JSON.parse(value);
+  var result = "";
+  result = result + data.name;
+  result = result + " ";
+  for(let i = 0; i < data.star; i++) result = result + star;
+  return result;
+}
+export { getRoutes , convertArrayFromSolidity, convertToDecimal, convertSPT, parseContent}
 

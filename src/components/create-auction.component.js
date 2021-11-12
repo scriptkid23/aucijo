@@ -19,6 +19,7 @@ export default function CreateAuctionComponent({ data, methods, owner, methodsMa
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
   const [item, setItem] = useState(null);
+  const [content, setContent] = useState("");
   const toggle = () => {
     setModal(!modal);
     getItemInformation();
@@ -26,6 +27,7 @@ export default function CreateAuctionComponent({ data, methods, owner, methodsMa
   const getItemInformation = async () => {
     const _data = await methods.findItemById(data.id).call({from:owner});
     setItem(_data);
+    setContent(JSON.parse(_data.content));
   }
   const { register, handleSubmit } = useForm();
   const onSubmit = async (value) => {
@@ -33,7 +35,7 @@ export default function CreateAuctionComponent({ data, methods, owner, methodsMa
       const {coin, decimal} = convertToDecimal(value.price);
       try {
         await methods.createAuction(
-            value.name,
+            content?.name,
             parseInt(data.id),
             value.description,
             coin,
@@ -74,7 +76,8 @@ export default function CreateAuctionComponent({ data, methods, owner, methodsMa
                   <label className="text-secondary">Name</label>
                   <Input
                     placeholder="Type name of auction."
-                    {...register("name", { required: true })}
+                    disabled
+                    defaultValue={content?.name}
                   />
                 </FormGroup>
               </Col>
