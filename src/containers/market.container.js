@@ -45,9 +45,14 @@ function MarketContainer({methods, methodsMarket, eventsMarket , setAlert, owner
         localStorage.setItem("ADDRESS_MARKET",address);
         setAddress(address);
     }
+    const copyAddress = () => {
+        var copyText = document.getElementById("address-market");
+        navigator.clipboard.writeText(copyText.textContent);
+        setAlert("success","Copied to clipboard")
+    }
     return (
         <div className="content d-flex vh-100">
-            <p className="position-absolute">Market Address: <span className="text-info">{address}</span></p>
+            <p className="position-absolute">Market Address: <span className="text-info pointer" id="address-market" onClick={copyAddress}>{address}</span></p>
             <Wheel items={GameItem} onSelectItem={onSelectItem} turn={turn} setAlert={setAlert}/>
         </div>
     )
