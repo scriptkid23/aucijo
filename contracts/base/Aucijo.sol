@@ -60,8 +60,8 @@ contract Aucijo is ERC20 {
         return members[msg.sender];
     }
     /**
-        @param _tokenId: token id
-        @param _NFTStoreAddress: address of Smartcontract defined token  
+        @param _tokenId token id
+        @param _NFTStoreAddress address of Smartcontract defined token  
      */
     function addItem(uint256 _tokenId, address _NFTStoreAddress) public mRegistered{
         require(IERC721Metadata(_NFTStoreAddress).ownerOf(_tokenId) == msg.sender,"You don't own this item");
@@ -126,11 +126,12 @@ contract Aucijo is ERC20 {
         members[msg.sender].tokens = balanceOf(msg.sender);
         auctions[id].status = AuctionStatus.CLOSED;
     }
-    function createAuction(string memory name,uint itemId,  string memory description, uint price, uint start_time, uint end_time) public mRegistered{
+    function createAuction(string memory name,uint itemId,  string memory description, uint price, uint decimal, uint start_time, uint end_time) public mRegistered{
         require(keccak256(abi.encodePacked((name))) > 0 && start_time >= block.timestamp && end_time > start_time,'Outside of auction time');
         require(itemExist[itemId],'Item not Exist');
         require(!itemIsAuction[itemId],'Item was auction!');
         itemIsAuction[itemId] = true;
+        price = price * (10 ** (18 - decimal));
         Auction memory auction = Auction(_auctionId.current(), name, itemId, description, price, start_time, end_time, AuctionStatus.START, msg.sender, msg.sender);
         auctions.push(auction);
         emit AddAuction(_auctionId.current(), name, itemId, description, price, AuctionStatus.START, start_time, end_time);
@@ -148,9 +149,13 @@ contract Aucijo is ERC20 {
     //     auctions[id].status = AuctionStatus.CLOSED ;
     // }
     // đấu giá chỉ được thực hiện khi trong thời gian start và end 
-    // khi người dùng đấu giá, sẽ có một StoreToken giữ số tiền người đấu giá để  giữ số tiền người đấu giá
-    
-    function bid(uint id, uint price) public mRegistered{
+    // khi người dùng đấu giá, sẽ có một StoreToken giữ số tiền người đấu giá
+    /**
+        @param price   value was process from client
+        @param decimal number decimal in price
+     */
+    function bid(uint id, uint price, uint decimal) public mRegistered{
+        price = price * (10 ** (18 - decimal));
         require(auctions[id].status != AuctionStatus.CLOSED,'auction was closed');
         require(auctions[id].start_time <= block.timestamp && auctions[id].end_time >= block.timestamp, 'Outside of auction time');
         require(auctions[id].owner != msg.sender,'You are the owner');
