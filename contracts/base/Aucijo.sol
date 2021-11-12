@@ -3,10 +3,11 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol";
+import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 import {ArrayLib} from "./Utils.sol";
 
 import "./Schemas.sol";
-contract Aucijo is ERC20 {
+contract Aucijo is ERC20, IERC721Receiver {
     address         private StoreToken;
     uint256         private rate;
     constructor() ERC20("Spirity Token", "SPT") {
@@ -15,8 +16,13 @@ contract Aucijo is ERC20 {
         rate        = 1000;
     }
     // address deploy smart contract and hold token in auction
-    // address private StoreToken = 0x9285640D823eDd78aA24821031aC6499f37825C4;
-    
+
+    //because smart contract hold item so i using funciton onERC721Received
+    //reference: https://github.com/ethereum/EIPs/blob/master/EIPS/eip-721.md 
+    function onERC721Received(address,address,uint256,bytes memory
+    ) public virtual override returns (bytes4) {
+        return this.onERC721Received.selector;
+    }
     using Counters for Counters.Counter;
     using ArrayLib for Item[];
     
@@ -109,8 +115,7 @@ contract Aucijo is ERC20 {
         members[auctions[id].currentKing].historyTransaction.push(historyTransactionOfPurcharser);
         _historyTransactionId.increment();
         // processing for SpiMarket
-        IERC721Metadata(items[auctions[id].itemId].factory).approve(auctions[id].currentKing, items[auctions[id].itemId].tokenId);
-        IERC721Metadata(items[auctions[id].itemId].factory).transferFrom(auctions[id].owner, auctions[id].currentKing, items[auctions[id].itemId].tokenId);
+        IERC721Metadata(items[auctions[id].itemId].factory).safeTransferFrom(address(this), auctions[id].currentKing, items[auctions[id].itemId].tokenId);
         
     } 
     function revokeAuction(uint id) public mRegistered{
@@ -123,6 +128,7 @@ contract Aucijo is ERC20 {
         }
         auctions[id].status = AuctionStatus.CLOSED;
         itemIsAuction[auctions[id].itemId] = false;
+        IERC721Metadata(items[auctions[id].itemId].factory).safeTransferFrom(address(this), msg.sender, items[auctions[id].itemId].tokenId);
     }
     function findItemById(uint id) public view mRegistered returns(Item memory){
         return items[id];

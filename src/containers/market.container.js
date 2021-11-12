@@ -20,9 +20,8 @@ function MarketContainer({methods, methodsMarket, eventsMarket , setAlert, owner
             eventsMarket.AwardRecipient({filter: {recipient: owner}},
                 (err, event) => {
                     if(!err){
-                        setAlert("success","congratulations️ 🎉 you already own " + event.returnValues.tokenId);
+                        setAlert("success","congratulations️ 🎉 you already own token with id: " + event.returnValues.tokenId);
                         setTurn(true);
-                        addItem(event.returnValues.tokenId);
                     }
                     else{
                         setAlert("danger","error: " + err)
@@ -36,10 +35,6 @@ function MarketContainer({methods, methodsMarket, eventsMarket , setAlert, owner
     },[])
     const award = async(data) => {
         await methodsMarket.awardItem(data).send({from: owner, gas: GAS});
-    }
-    const addItem = async (_tokenId) => {
-        const _address = localStorage.getItem("ADDRESS_MARKET");
-        await methods.addItem(_tokenId, _address).send({from:owner, gas: GAS});
     }
     const getTurn = async() => {
         const turn = await methodsMarket.getWasSpin().call({from: owner });
