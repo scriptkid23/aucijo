@@ -13,6 +13,8 @@ const WrapperDrizzleComponent = (OriginalComponent) => {
         <OriginalComponent
           methods={this.context.contracts.Aucijo.methods}
           methodsMarket = {this.context.contracts.SpiMarket.methods}
+          spimarketAddress = {this.context.contracts.SpiMarket.address}
+          aucijoAddress = {this.context.contracts.Aucijo.address}
           context={this.context}
           events = {this.context.contracts.Aucijo.events}
           eventsMarket = {this.context.contracts.SpiMarket.events}

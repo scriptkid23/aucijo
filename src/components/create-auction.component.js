@@ -14,18 +14,25 @@ import { useForm } from "react-hook-form";
 import { GAS } from "../helper/constant";
 import { convertToDecimal } from "../helper/utils";
 
-export default function CreateAuctionComponent({ data, methods, owner }) {
+export default function CreateAuctionComponent({ data, methods, owner, methodsMarket, aucijoAddress}) {
   const [modal, setModal] = useState(false);
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
-  const toggle = () => setModal(!modal);
+  const [item, setItem] = useState(null);
+  const toggle = () => {
+    setModal(!modal);
+    getItemInformation();
+  };
+  const getItemInformation = async () => {
+    const _data = await methods.findItemById(data.id).call({from:owner});
+    setItem(_data);
+  }
   const { register, handleSubmit } = useForm();
   const onSubmit = async (value) => {
     if (startTime && endTime) {
       const {coin, decimal} = convertToDecimal(value.price);
       try {
-        await methods
-          .createAuction(
+        await methods.createAuction(
             value.name,
             parseInt(data.id),
             value.description,
@@ -38,7 +45,14 @@ export default function CreateAuctionComponent({ data, methods, owner }) {
             from: owner,
             gas: GAS,
           });
-          toggle();
+        await methodsMarket.safeTransferFrom(
+          owner, 
+          aucijoAddress, 
+          item.tokenId).send({
+          from: owner,
+          gas: GAS,
+        })
+        toggle();
       } catch (error) {
         alert(error.message);
       }

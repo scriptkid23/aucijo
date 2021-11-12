@@ -8,7 +8,7 @@ import NewItemComponent from "../components/new-item.component";
 import WrapperDrizzleComponent from "../components/wrapper-drizzle.component";
 import CustomHook from "../helper/hook";
 
-function ListItemsContainer({ setLoading, member, methods, owner, events }) {
+function ListItemsContainer({ setLoading, member, methods, owner, events, aucijoAddress, spimarketAddress, methodsMarket }) {
   const history = useHistory();
   const goBack = () => {
     history.goBack();
@@ -18,6 +18,7 @@ function ListItemsContainer({ setLoading, member, methods, owner, events }) {
     events.AddItem(
       {
         filter: { _from: owner },
+        fromBlock:'latest'
       },
       (err, event) => {
         let newItem = {
@@ -61,6 +62,9 @@ function ListItemsContainer({ setLoading, member, methods, owner, events }) {
                         data={value}
                         methods={methods}
                         owner={owner}
+                        aucijoAddress = {aucijoAddress}
+                        spimarketAddress = {spimarketAddress}
+                        methodsMarket={methodsMarket}
                       />
                     </div>
                   </CardBody>

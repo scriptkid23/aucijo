@@ -17,6 +17,7 @@ import { compose } from "redux";
 import WrapperDrizzleComponent from "../components/wrapper-drizzle.component";
 import WrapperAlertComponent from "../components/wrapper-alert.component";
 import CustomHook from "../helper/hook";
+import { convertSPT } from "../helper/utils";
 function DashboardContainer({ member,events }) {
   const {updateToken} = CustomHook()
   React.useEffect(() => {
@@ -59,7 +60,7 @@ function DashboardContainer({ member,events }) {
             <CardHeader>
               <h5 className="card-category">Token</h5>
               <CardTitle tag="h3">
-                <i className="tim-icons icon-coins text-info" /> {member.tokens/Math.pow(10,18).toFixed(18)}{" "}
+                <i className="tim-icons icon-coins text-info" /> {convertSPT(member.tokens)}{" "}
                 SPT
               </CardTitle>
             </CardHeader>
