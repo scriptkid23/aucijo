@@ -38,7 +38,7 @@ contract Aucijo is ERC20, IERC721Receiver {
     // check item exist in contract
     mapping(uint => bool) itemExist;
     mapping(uint => bool) itemIsAuction;
-    mapping(address => uint) wasAddItem;
+    mapping(address => mapping(uint => bool)) wasAddItem;
     modifier mRegistered() {
         require(registered[msg.sender], 'Member was not registered!');
         _;
@@ -77,7 +77,7 @@ contract Aucijo is ERC20, IERC721Receiver {
      */
     function addItem(uint256 _tokenId, address _NFTStoreAddress) public mRegistered{
         require(IERC721Metadata(_NFTStoreAddress).ownerOf(_tokenId) == msg.sender,"You don't own this item!");
-        require(wasAddItem[_NFTStoreAddress] != _tokenId,"You was add token!");
+        require(!wasAddItem[_NFTStoreAddress][_tokenId],"You was add token!");
 
         Item storage item               = items[_itemId.current()];
         item.content                    = IERC721Metadata(_NFTStoreAddress).tokenURI(_tokenId);
@@ -88,7 +88,7 @@ contract Aucijo is ERC20, IERC721Receiver {
         itemExist[_itemId.current()]   = true;
         members[msg.sender].items.push(item);
         
-        wasAddItem[_NFTStoreAddress] = _tokenId;
+        wasAddItem[_NFTStoreAddress][_tokenId] = true;
         _itemId.increment();
         emit AddItem(msg.sender, item.id, item.content);
     }
