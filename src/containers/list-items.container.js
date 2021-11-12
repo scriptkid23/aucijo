@@ -22,7 +22,7 @@ function ListItemsContainer({ setLoading, member, methods, owner, events }) {
       (err, event) => {
         let newItem = {
           id: event.returnValues._id,
-          name: event.returnValues._value,
+          content: event.returnValues._value,
           owner: event.returnValues._from,
         };
         updateItem(newItem);
@@ -54,7 +54,7 @@ function ListItemsContainer({ setLoading, member, methods, owner, events }) {
                       <p>
                         ID: {value.id}
                         <br />
-                        {value.name}
+                        {value.content}
                       </p>
 
                       <CreateAuctionComponent

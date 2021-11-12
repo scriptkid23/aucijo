@@ -10,6 +10,7 @@ import WrapperAlertComponent from "../components/wrapper-alert.component";
 import WrapperDrizzleComponent from "../components/wrapper-drizzle.component";
 import CustomHook from "../helper/hook";
 import _ from 'lodash';
+import { convertSPT } from "../helper/utils";
 
 function AuctionDetail({ methods, owner, auction, events, setAlert }) {
   const history = useHistory();
@@ -75,7 +76,7 @@ function AuctionDetail({ methods, owner, auction, events, setAlert }) {
                       className="avatar"
                       src={require("../assets/img/items.png").default}
                     />
-                    <h5 className="title">Price {auction.price} SPT</h5>
+                    <h5 className="title">Price {convertSPT(auction.price)} SPT</h5>
                   </a>
                   <p className="description">{item && _.capitalize(item.name)}</p>
                 </div>

@@ -1,5 +1,5 @@
 
-export const GAS = 700000;
+export const GAS = 1000000;
 export const GameItem = [
   {
       name: "Legion",

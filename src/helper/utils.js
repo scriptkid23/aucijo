@@ -20,5 +20,18 @@ function convertArrayFromSolidity(arr){
   }
   return temp;
 }
-export { getRoutes , convertArrayFromSolidity}
+function convertToDecimal(value){
+  let payload = parseFloat(value).toString().split('.');
+  let decimal = 0;
+  let coin = parseInt(payload[0]);
+  if(payload.length === 2) {
+    coin = parseInt(payload[0]) * Math.pow(10,payload[1].length);
+    decimal = parseInt(payload[1].length);
+  }
+  return {coin, decimal};
+}
+function convertSPT(value){
+  return value/Math.pow(10,18).toFixed(18);
+}
+export { getRoutes , convertArrayFromSolidity, convertToDecimal, convertSPT}
 

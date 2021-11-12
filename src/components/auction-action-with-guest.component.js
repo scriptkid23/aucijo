@@ -9,6 +9,7 @@ import {
   Form,
 } from "reactstrap";
 import { GAS } from "../helper/constant";
+import { convertToDecimal } from "../helper/utils";
 export default function AuctionActionWithGuest({
   auction,
   methods,
@@ -18,7 +19,8 @@ export default function AuctionActionWithGuest({
 }) {
   const bid = async (data) => {
     try {
-      await methods.bid(parseInt(itemId), parseInt(data.price)).send({
+      const {coin, decimal} = convertToDecimal(data.price);
+      await methods.bid(parseInt(itemId), coin, decimal).send({
         from: owner,
         gas: GAS,
       });

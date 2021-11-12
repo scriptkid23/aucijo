@@ -23,7 +23,7 @@ contract Aucijo is ERC20 {
     Counters.Counter private _auctionId;
     Counters.Counter private _memberId;
     Counters.Counter private _historyTransactionId;
-    Counters.Counter private _tokenId;
+    Counters.Counter private _itemId;
  
     Auction[] auctions;
     mapping(address => Member) members;
@@ -62,28 +62,29 @@ contract Aucijo is ERC20 {
         return members[msg.sender];
     }
     /**
-        @param tokenId token id
+        @param _tokenId token id
         @param _NFTStoreAddress address of Smartcontract defined token  
         items[id] = {
             id: defined by market
             address: address of market
         }
      */
-    function addItem(uint256 tokenId, address _NFTStoreAddress) public mRegistered{
-        require(IERC721Metadata(_NFTStoreAddress).ownerOf(tokenId) == msg.sender,"You don't own this item!");
-        require(wasAddItem[_NFTStoreAddress] != tokenId,"You was add token!");
+    function addItem(uint256 _tokenId, address _NFTStoreAddress) public mRegistered{
+        require(IERC721Metadata(_NFTStoreAddress).ownerOf(_tokenId) == msg.sender,"You don't own this item!");
+        require(wasAddItem[_NFTStoreAddress] != _tokenId,"You was add token!");
 
-        Item storage item = items[_tokenId.current()];
-        item.content = IERC721Metadata(_NFTStoreAddress).tokenURI(tokenId);
-        item.owner = msg.sender;
-        item.id = tokenId;
-        item.factory = _NFTStoreAddress;
-        itemExist[_tokenId.current()] = true;
+        Item storage item               = items[_itemId.current()];
+        item.content                    = IERC721Metadata(_NFTStoreAddress).tokenURI(_tokenId);
+        item.owner                      = msg.sender;
+        item.id                         = _itemId.current();
+        item.tokenId                    = _tokenId;
+        item.factory                    = _NFTStoreAddress;
+        itemExist[_itemId.current()]   = true;
         members[msg.sender].items.push(item);
         
-        wasAddItem[_NFTStoreAddress] = tokenId;
-        _tokenId.increment();
-        emit AddItem(msg.sender, tokenId, item.content);
+        wasAddItem[_NFTStoreAddress] = _tokenId;
+        _itemId.increment();
+        emit AddItem(msg.sender, item.id, item.content);
     }
 
     function agree(uint id) public mRegistered{
@@ -108,8 +109,8 @@ contract Aucijo is ERC20 {
         members[auctions[id].currentKing].historyTransaction.push(historyTransactionOfPurcharser);
         _historyTransactionId.increment();
         // processing for SpiMarket
-        IERC721Metadata(items[auctions[id].itemId].factory).approve(auctions[id].currentKing, items[auctions[id].itemId].id);
-        IERC721Metadata(items[auctions[id].itemId].factory).transferFrom(auctions[id].owner, auctions[id].currentKing, items[auctions[id].itemId].id);
+        IERC721Metadata(items[auctions[id].itemId].factory).approve(auctions[id].currentKing, items[auctions[id].itemId].tokenId);
+        IERC721Metadata(items[auctions[id].itemId].factory).transferFrom(auctions[id].owner, auctions[id].currentKing, items[auctions[id].itemId].tokenId);
         
     } 
     function revokeAuction(uint id) public mRegistered{

@@ -12,6 +12,7 @@ import {
 import Datetime from "react-datetime";
 import { useForm } from "react-hook-form";
 import { GAS } from "../helper/constant";
+import { convertToDecimal } from "../helper/utils";
 
 export default function CreateAuctionComponent({ data, methods, owner }) {
   const [modal, setModal] = useState(false);
@@ -21,13 +22,15 @@ export default function CreateAuctionComponent({ data, methods, owner }) {
   const { register, handleSubmit } = useForm();
   const onSubmit = async (value) => {
     if (startTime && endTime) {
+      const {coin, decimal} = convertToDecimal(value.price);
       try {
         await methods
           .createAuction(
             value.name,
             parseInt(data.id),
             value.description,
-            parseInt(value.price),
+            coin,
+            decimal,
             startTime.unix(),
             endTime.unix()
           )

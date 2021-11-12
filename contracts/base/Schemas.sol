@@ -17,6 +17,7 @@ struct Member {
     }
 struct Item {
         uint id;
+        uint tokenId;
         string content;
         address owner;
         address factory;
