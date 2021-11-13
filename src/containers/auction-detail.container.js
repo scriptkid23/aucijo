@@ -24,7 +24,7 @@ function AuctionDetail({ methods, owner, auction, events, setAlert }) {
   const getAuctionDetail = async (id) => {
     const data = await methods.findAuctionById(id).call({ from: owner });
     if(data){
-      const itemDetail = await methods.findItemById(id).call({from: owner});
+      const itemDetail = await methods.findItemById(data.itemId).call({from: owner});
       setItem(Object.assign({},itemDetail));
       fetchAuctionDetail(data);
     }
