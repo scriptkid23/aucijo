@@ -6,10 +6,11 @@ import { compose } from "redux";
 import CreateAuctionComponent from "../components/create-auction.component";
 import NewItemComponent from "../components/new-item.component";
 import WrapperDrizzleComponent from "../components/wrapper-drizzle.component";
+import WrapperAlertComponent from '../components/wrapper-alert.component'
 import CustomHook from "../helper/hook";
 import { parseContent } from "../helper/utils";
 
-function ListItemsContainer({member, methods, owner, aucijoAddress, spimarketAddress, methodsMarket }) {
+function ListItemsContainer({member, methods, owner, aucijoAddress, spimarketAddress, methodsMarket, setAlert }) {
   const history = useHistory();
   const goBack = () => {
     history.goBack();
@@ -49,6 +50,7 @@ function ListItemsContainer({member, methods, owner, aucijoAddress, spimarketAdd
                         aucijoAddress = {aucijoAddress}
                         spimarketAddress = {spimarketAddress}
                         methodsMarket={methodsMarket}
+                        setAlert={setAlert}
                       />
                     </div>
                   </CardBody>
@@ -66,7 +68,7 @@ const mapStateToProps = (state) => {
     member: state.member,
   };
 };
-const componseListItemsContainer = compose(WrapperDrizzleComponent)(
+const componseListItemsContainer = compose(WrapperDrizzleComponent,WrapperAlertComponent)(
   ListItemsContainer
 );
 export default connect(mapStateToProps)(componseListItemsContainer);

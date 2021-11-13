@@ -15,7 +15,7 @@ import { GAS } from "../helper/constant";
 import { convertToDecimal } from "../helper/utils";
 import Spinner from "./spinner";
 
-export default function CreateAuctionComponent({ data, methods, owner, methodsMarket, aucijoAddress}) {
+export default function CreateAuctionComponent({ data, methods, owner, methodsMarket, aucijoAddress, setAlert}) {
   const [modal, setModal] = useState(false);
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
@@ -60,7 +60,7 @@ export default function CreateAuctionComponent({ data, methods, owner, methodsMa
         toggle();
         setLoading(false);
       } catch (error) {
-        alert(error.message);
+        setAlert("danger",error.message);
         setLoading(false);
       }
     }
