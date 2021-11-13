@@ -40,7 +40,7 @@ const reducers = handleActions(
     [actions.updateToken]: (state, action) => {
       return {
         ...state,
-        tokens: action.payload,
+        balance: action.payload,
       };
     },
   },
