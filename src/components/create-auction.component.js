@@ -13,6 +13,7 @@ import Datetime from "react-datetime";
 import { useForm } from "react-hook-form";
 import { GAS } from "../helper/constant";
 import { convertToDecimal } from "../helper/utils";
+import Spinner from "./spinner";
 
 export default function CreateAuctionComponent({ data, methods, owner, methodsMarket, aucijoAddress}) {
   const [modal, setModal] = useState(false);
@@ -20,6 +21,7 @@ export default function CreateAuctionComponent({ data, methods, owner, methodsMa
   const [endTime, setEndTime] = useState(null);
   const [item, setItem] = useState(null);
   const [content, setContent] = useState("");
+  const [loading, setLoading] = useState(false);
   const toggle = () => {
     setModal(!modal);
     getItemInformation();
@@ -31,6 +33,7 @@ export default function CreateAuctionComponent({ data, methods, owner, methodsMa
   }
   const { register, handleSubmit } = useForm();
   const onSubmit = async (value) => {
+    setLoading(true);
     if (startTime && endTime) {
       const {coin, decimal} = convertToDecimal(value.price);
       try {
@@ -55,8 +58,10 @@ export default function CreateAuctionComponent({ data, methods, owner, methodsMa
           gas: GAS,
         })
         toggle();
+        setLoading(false);
       } catch (error) {
         alert(error.message);
+        setLoading(false);
       }
     }
   };
@@ -132,7 +137,9 @@ export default function CreateAuctionComponent({ data, methods, owner, methodsMa
             </Row>
             <Row>
               <Col>
-                <Button color="primary">Create</Button>
+                <Button color="primary" disabled={loading}>
+                  {loading ? <Spinner loading={true}/>:"Create"}
+                </Button>
               </Col>
             </Row>
           </Form>
