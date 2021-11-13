@@ -75,9 +75,10 @@ function HomeLayout(props) {
   const fetchData = async() => {
     try {
       const data = await props.methods.getProfile().call({from:props.owner});
+      const balance = await props.methods.balanceOf(props.owner).call({from:props.owner});
       const auctionList = await props.methods.getAllAuction().call({from:props.owner});
       if(data){
-        fetchMemberDetail(data);
+        fetchMemberDetail(data,balance);
         fetchAuctionList(auctionList);
       }
     } catch (error) {

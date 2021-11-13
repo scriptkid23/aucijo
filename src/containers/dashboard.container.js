@@ -41,7 +41,7 @@ function DashboardContainer({ member }) {
             <CardHeader>
               <h5 className="card-category">Token</h5>
               <CardTitle tag="h3">
-                <i className="tim-icons icon-coins text-info" /> {convertSPT(member.tokens)}{" "}
+                <i className="tim-icons icon-coins text-info" /> {convertSPT(member.balance)}{" "}
                 SPT
               </CardTitle>
             </CardHeader>

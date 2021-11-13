@@ -6,8 +6,8 @@ export default function CustomHook(){
     const dispatch = useDispatch();
     const memberActions = {...MemberReducer.actions};   
     const auctionActions = {...AuctionReducer.actions};
-    const fetchMemberDetail = (data) => {
-        dispatch(memberActions.fetchMemberDetail(data))
+    const fetchMemberDetail = (data,balance) => {
+        dispatch(memberActions.fetchMemberDetail({data:data,balance: balance}))
     }
     const fetchAuctionList = (data) => {
         dispatch(auctionActions.fetchAuctionList(data));

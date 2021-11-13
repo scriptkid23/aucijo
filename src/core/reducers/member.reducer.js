@@ -10,6 +10,7 @@ export const actions = createActions({
 const defaultState = {
   id: 0,
   tokens: 0,
+  balance: 0,
   firsname: "",
   lastname: "",
   email: "",
@@ -29,9 +30,10 @@ const reducers = handleActions(
     [actions.fetchMemberDetail]: (state, action) => {
       return {
         ...state,
-        ...action.payload,
+        ...action.payload.data,
+        balance: action.payload.balance,
         historyTransaction: convertArrayFromSolidity(
-          action.payload.historyTransaction
+          action.payload.data.historyTransaction
         ),
       };
     },
