@@ -1,14 +1,14 @@
 @startuml state
+hide empty description
 
+State PENDING
+State START
+State STOP
 
-State1: PENDING
-State2: START
-State3: CLOSE
-
-[*] -> State1
-State1 -> State2: Create auction
-State2 -> State3: Revoke token
-State2 -> State3: Revoke auction
-State2 -> State3: successful transaction
-State3 -> [*]
+[*] -> PENDING
+PENDING -> START: Create auction
+START -> STOP: Revoke token
+START -> STOP: Revoke auction
+START -> STOP: successful transaction
+STOP -> [*]
 @enduml
