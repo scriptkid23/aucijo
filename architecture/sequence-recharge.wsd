@@ -1,7 +1,7 @@
 @startuml Recharge
 autoactivate on
 skinparam Style strictuml
-
+skinparam shadowing false
 actor   Actor   as a
 participant "decentralized auction system" as das
 

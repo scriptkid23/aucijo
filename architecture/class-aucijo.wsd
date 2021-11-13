@@ -1,5 +1,5 @@
 @startuml
-
+skinparam shadowing false
 class Aucijo {
     ' -- inheritance --
 	{abstract}ERC20

@@ -1,7 +1,7 @@
 @startuml Login
 autoactivate on
 skinparam Style strictuml
-
+skinparam shadowing false
 actor   Actor   as a
 participant "decentralized auction system" as das
 participant Metamask as m

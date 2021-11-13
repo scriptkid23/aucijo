@@ -7,7 +7,7 @@
 
 
 ' -- classes --
-
+skinparam shadowing false
 
 class SpiMarket {
     ' -- inheritance --
