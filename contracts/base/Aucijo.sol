@@ -7,6 +7,11 @@ import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 import {ArrayLib} from "./Utils.sol";
 
 import "./Schemas.sol";
+/**
+    to be able to transfer "item" from "owner" of Spimarket 
+    (or any contract using ERC721) to the contract address "Aucijo"
+    then Aucijo must implement interface IERC721Receiver
+ */
 contract Aucijo is ERC20, IERC721Receiver {
     address         private StoreToken;
     uint256         private rate;
