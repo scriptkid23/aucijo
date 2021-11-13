@@ -1,0 +1,13 @@
+@startuml CreateAuction
+autoactivate on
+skinparam Style strictuml
+
+actor   Actor   as a
+participant "decentralized auction system" as das
+
+a -> das: createAuction()
+das -> das: Check auction
+return status
+return response
+
+@enduml

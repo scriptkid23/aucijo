@@ -1,0 +1,40 @@
+@startuml User case Aucijo
+left to right direction
+actor "Actor" as fc
+rectangle "Decentralized Auction" {
+  usecase "Recharge" as UC1
+  usecase "Withdrawal" as UC2
+  usecase "Register member" as UC3
+  usecase "bid" as UC4
+  usecase "Revoke token" as UC5
+  usecase "Get profile" as UC6
+  usecase "Add item" as UC7
+  usecase "Revoke auction" as UC8
+  usecase "Create auction" as UC9
+  usecase "Agree" as UC10
+  usecase "Award item" as UC12
+  usecase "Login with metamask" as UC14
+  usecase "Logout with metamask" as UC15
+}
+fc --> UC14
+fc --> UC15
+fc --> UC1
+fc --> UC2
+fc --> UC3
+fc --> UC4
+fc --> UC5
+fc --> UC6
+fc --> UC7
+fc --> UC8
+fc --> UC9
+fc --> UC10
+fc --> UC12
+
+
+UC8 .> UC9: extends
+UC4 .> UC9: extends
+UC5 .> UC9: extends
+UC10 .> UC9: extends
+
+
+@enduml

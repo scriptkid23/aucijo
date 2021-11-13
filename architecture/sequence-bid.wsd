@@ -1,0 +1,13 @@
+@startuml Bid
+autoactivate on
+skinparam Style strictuml
+
+actor   Actor   as a
+participant "decentralized auction system" as das
+
+a -> das: bid()
+das -> das: Check conditional
+return status
+return response
+
+@enduml

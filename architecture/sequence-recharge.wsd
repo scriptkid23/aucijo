@@ -1,0 +1,12 @@
+@startuml Recharge
+autoactivate on
+skinparam Style strictuml
+
+actor   Actor   as a
+participant "decentralized auction system" as das
+
+a -> das: coinCharge(uint, uint)
+return response
+
+
+@enduml

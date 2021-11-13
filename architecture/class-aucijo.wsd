@@ -1,0 +1,54 @@
+@startuml
+
+class Aucijo {
+    ' -- inheritance --
+	{abstract}ERC20
+	{abstract}IERC721Receiver
+
+    ' -- usingFor --
+	{abstract}📚Counters for [[Counters.Counter]]
+	{abstract}📚ArrayLib for [[Item]]
+
+    ' -- vars --
+	-[[address]] StoreToken
+	-[[uint256]] rate
+	-[[Counters.Counter]] _auctionId
+	-[[Counters.Counter]] _memberId
+	-[[Counters.Counter]] _historyTransactionId
+	-[[Counters.Counter]] _itemId
+	#[[Auction]] auctions
+	#[[mapping address=>Member ]] members
+	#[[mapping uint=>Item ]] items
+	#[[mapping address=>bool ]] registered
+	#[[mapping uint=>bool ]] itemExist
+	#[[mapping uint=>bool ]] itemIsAuction
+	#[[mapping address=>mapping uint=>bool  ]] wasAddItem
+
+    ' -- methods --
+	+**__constructor__**()
+	+onERC721Received()
+	+registerMember()
+	+wasRegistered()
+	+getProfile()
+	+addItem()
+	+agree()
+	+revokeAuction()
+	+findItemById()
+	+revokeToken()
+	+createAuction()
+	+findAuctionById()
+	+getAllAuction()
+	+bid()
+	+getCurrentTime()
+	+coinCharge()
+	+withdrawal()
+	+**__constructor__**()
+
+}
+' -- inheritance / usingFor --
+Aucijo --[#DarkGoldenRod]|> ERC20
+Aucijo --[#DarkGoldenRod]|> IERC721Receiver
+Aucijo ..[#DarkOliveGreen]|> Counters : //for Counters.Counter//
+Aucijo ..[#DarkOliveGreen]|> ArrayLib : //for Item//
+
+@enduml

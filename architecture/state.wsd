@@ -1,0 +1,14 @@
+@startuml state
+
+
+State1: PENDING
+State2: START
+State3: CLOSE
+
+[*] -> State1
+State1 -> State2: Create auction
+State2 -> State3: Revoke token
+State2 -> State3: Revoke auction
+State2 -> State3: successful transaction
+State3 -> [*]
+@enduml

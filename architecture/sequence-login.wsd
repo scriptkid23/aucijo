@@ -1,0 +1,25 @@
+@startuml Login
+autoactivate on
+skinparam Style strictuml
+
+actor   Actor   as a
+participant "decentralized auction system" as das
+participant Metamask as m
+
+a -> das: Request login
+
+das -> m: Request login
+m -->a: Request to choose account in metamask wallet
+a -> m: Selected account
+m --> das: response account information
+das -> das: check account information
+return status
+alt registered
+    return redirect to home page
+else unregistered
+    das --> a: Registration required 
+    a -> das: register member
+    return Redirect to home page
+end
+
+@enduml

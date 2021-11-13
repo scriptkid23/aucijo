@@ -1,0 +1,13 @@
+@startuml AddItem
+autoactivate on
+skinparam Style strictuml
+
+actor   Actor   as a
+participant "decentralized auction system" as das
+
+a -> das: addItem()
+das -> das: Check if item belongs to owner
+return status
+return response
+
+@enduml
