@@ -22,7 +22,7 @@ function ListItemsContainer({member, methods, owner, aucijoAddress, spimarketAdd
           className="tim-icons icon-minimal-left text-info pointer"
           onClick={goBack}
         />
-        <NewItemComponent methods={methods} owner={owner} />
+        <NewItemComponent methods={methods} owner={owner} setAlert={setAlert}/>
       </div>
       <div>
         <h5 className="title">

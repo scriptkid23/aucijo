@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, Form, FormGroup, Input, Modal, ModalBody } from "reactstrap";
 import { GAS } from "../helper/constant";
-export default function NewItemComponent({ methods, owner }) {
+export default function NewItemComponent({ methods, owner, setAlert }) {
   const [modal, setModal] = useState(false);
   const toggle = () => setModal(!modal);
   const [id, setId] = useState("");
@@ -19,7 +19,7 @@ export default function NewItemComponent({ methods, owner }) {
         alert("Field name is empty");
       }
     } catch (error) {
-      alert(error.message);
+      setAlert("danger",error.message);
     }
   };
   return (
