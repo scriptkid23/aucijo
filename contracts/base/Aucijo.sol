@@ -132,6 +132,10 @@ contract Aucijo is ERC20, IERC721Receiver {
         auctions[id].status = AuctionStatus.CLOSED;
         itemIsAuction[auctions[id].itemId] = false;
         IERC721Metadata(items[auctions[id].itemId].factory).safeTransferFrom(address(this), msg.sender, items[auctions[id].itemId].tokenId);
+        // add history
+        HistoryTransaction memory historyRevokeAuction = HistoryTransaction(_historyTransactionId.current(),items[auctions[id].itemId].content,"revoke item from auction",msg.sender,block.timestamp);
+        members[msg.sender].historyTransaction.push(historyRevokeAuction);
+        _historyTransactionId.increment();
     }
     function findItemById(uint id) public view mRegistered returns(Item memory){
         return items[id];
@@ -156,6 +160,10 @@ contract Aucijo is ERC20, IERC721Receiver {
         auctions.push(auction);
         emit AddAuction(_auctionId.current(), name, itemId, description, price, AuctionStatus.START, start_time, end_time);
         _auctionId.increment();
+        // add to history 
+        HistoryTransaction memory historyCreateAuction = HistoryTransaction(_historyTransactionId.current(),items[itemId].content,"approve",msg.sender,block.timestamp);
+        members[msg.sender].historyTransaction.push(historyCreateAuction);
+        _historyTransactionId.increment();
     }
     
     function findAuctionById(uint id) public view mRegistered returns(Auction memory){
