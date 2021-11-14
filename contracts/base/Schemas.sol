@@ -6,7 +6,6 @@ enum AuctionStatus {PENDING, START, CLOSED}
 
 struct Member {
         uint id;
-        uint tokens;
         string firstname;
         string lastname;
         string email;
