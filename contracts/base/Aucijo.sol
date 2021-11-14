@@ -105,7 +105,6 @@ contract Aucijo is ERC20, IERC721Receiver {
         require(auctions[id].currentKing != msg.sender,'You are destructive');
         // processing seller: auctions[id].owner
         _transfer(StoreToken, auctions[id].owner, auctions[id].price);
-        members[auctions[id].owner].tokens = balanceOf(auctions[id].owner);
         members[auctions[id].owner].items.remove(auctions[id].itemId);
         // proessing purchaser: auctions[id].currentKing
         items[auctions[id].itemId].owner = auctions[id].currentKing;
@@ -129,7 +128,6 @@ contract Aucijo is ERC20, IERC721Receiver {
         require(auctions[id].status == AuctionStatus.START,'Auction was closed');
         if(auctions[id].currentKing != msg.sender){
             _transfer(StoreToken, auctions[id].currentKing, auctions[id].price);
-            members[auctions[id].currentKing].tokens = balanceOf(auctions[id].currentKing);
         }
         auctions[id].status = AuctionStatus.CLOSED;
         itemIsAuction[auctions[id].itemId] = false;
@@ -146,7 +144,6 @@ contract Aucijo is ERC20, IERC721Receiver {
         require(auctions[id].end_time < block.timestamp,'You not permission');
         require(auctions[id].status == AuctionStatus.START,'Auction was closed');
         _transfer(StoreToken, msg.sender, auctions[id].price);
-        members[msg.sender].tokens = balanceOf(msg.sender);
         auctions[id].status = AuctionStatus.CLOSED;
     }
     function createAuction(string memory name,uint itemId,  string memory description, uint price, uint decimal, uint start_time, uint end_time) public mRegistered{
@@ -182,15 +179,13 @@ contract Aucijo is ERC20, IERC721Receiver {
         require(auctions[id].status != AuctionStatus.CLOSED,'auction was closed');
         require(auctions[id].start_time <= block.timestamp && auctions[id].end_time >= block.timestamp, 'Outside of auction time');
         require(auctions[id].owner != msg.sender,'You are the owner');
-        require(auctions[id].price < price && members[msg.sender].tokens > price, 'You are not enought SPT');
+        require(auctions[id].price < price && balanceOf(msg.sender) > price, 'You are not enought SPT');
         if(auctions[id].owner != auctions[id].currentKing) {
             _transfer(StoreToken, auctions[id].currentKing, auctions[id].price);
-            members[auctions[id].currentKing].tokens = balanceOf(auctions[id].currentKing);
         }
         auctions[id].price = price;
         auctions[id].currentKing = msg.sender;
         transfer(StoreToken, price);
-        members[msg.sender].tokens = balanceOf(msg.sender);
         emit BecomeKing(id, msg.sender, price, block.timestamp);
     }
     function getCurrentTime() public view mRegistered returns(uint){
@@ -200,21 +195,19 @@ contract Aucijo is ERC20, IERC721Receiver {
         (bool sent,) = address(this).call{value: msg.value}("");
         require(sent, "Failed to send Ether");
         _mint(msg.sender, msg.value * rate); // 1 ETH = rate *  SPT
-        members[msg.sender].tokens = balanceOf(msg.sender);
         HistoryTransaction memory historyTransactionOfCharge = HistoryTransaction(_historyTransactionId.current(),"SPT","charge",address(this),block.timestamp);
         members[msg.sender].historyTransaction.push(historyTransactionOfCharge);
-        emit CoinCharge(msg.sender, members[msg.sender].tokens);
+        emit CoinCharge(msg.sender, balanceOf(msg.sender));
     }
     function withdrawal(uint256 value, uint256 decimal) public payable mRegistered {
         uint256 coin = value * (10 ** (18 - decimal));
-        require(members[msg.sender].tokens >= coin,'amount of tokens exceeded');
+        require(balanceOf(msg.sender) >= coin,'amount of tokens exceeded');
         (bool sent,) = address(msg.sender).call{value:coin / rate}("");
         require(sent, "Failed to withdrawal Ether");
-        members[msg.sender].tokens = members[msg.sender].tokens - coin;
         transfer(StoreToken, coin);
         HistoryTransaction memory historyTransactionOfWithdrawal = HistoryTransaction(_historyTransactionId.current(),"SPT","withdrawal",address(this),block.timestamp);
         members[msg.sender].historyTransaction.push(historyTransactionOfWithdrawal);
-        emit Withdrawal(msg.sender, members[msg.sender].tokens);
+        emit Withdrawal(msg.sender, balanceOf(msg.sender));
     }
     receive() external payable {}
     
