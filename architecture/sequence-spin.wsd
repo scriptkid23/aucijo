@@ -1,0 +1,18 @@
+@startuml Spin
+autoactivate on
+skinparam Style strictuml
+skinparam shadowing false
+actor   Actor   as a
+participant "decentralized auction system" as das
+
+
+a -> das: Request spin in spimarket
+das -> das: check turn of member
+return status
+alt true
+    return tokenId
+else false
+    deactivate a
+    das --> a: response
+end
+@enduml
