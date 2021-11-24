@@ -5,14 +5,19 @@ import Wheel from '../components/Wheel'
 import WrapperDrizzleComponent from '../components/wrapper-drizzle.component';
 import WrapperAlertComponent from '../components/wrapper-alert.component';
 import { GameItem, GAS } from '../helper/constant'
+import { shuffle } from '../helper/utils';
 
 function MarketContainer({methods, methodsMarket, eventsMarket , setAlert, owner}) {
     const timeOut = 4000;
     const [address, setAddress] = React.useState("");
     const [turn, setTurn] = React.useState(false);
+    const [items, setItems] = React.useState([]);
     const onSelectItem = (data) => {
         setTimeout(() =>  award(JSON.stringify(GameItem[data])),timeOut);
     }
+    React.useLayoutEffect(() => {
+        setItems(shuffle(GameItem));
+    },[])
     React.useEffect(() => {
         try{
             getAddressMarket();
@@ -53,7 +58,7 @@ function MarketContainer({methods, methodsMarket, eventsMarket , setAlert, owner
     return (
         <div className="content d-flex vh-100">
             <p className="position-absolute">Market Address: <span className="text-info pointer" id="address-market" onClick={copyAddress}>{address}</span></p>
-            <Wheel items={GameItem} onSelectItem={onSelectItem} turn={turn} setAlert={setAlert}/>
+            <Wheel items={items} onSelectItem={onSelectItem} turn={turn} setAlert={setAlert}/>
         </div>
     )
 }

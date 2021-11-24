@@ -200,8 +200,11 @@ contract Aucijo is ERC20, IERC721Receiver {
         return block.timestamp;
     }
     function coinCharge() public payable mRegistered{
+        uint256 currentBalance = address(msg.sender).balance;
         (bool sent,) = address(this).call{value: msg.value}("");
         require(sent, "Failed to send Ether");
+        // makes sure that no money is transferred and the function is reverted.
+        assert(address(msg.sender).balance == currentBalance - msg.value);
         _mint(msg.sender, msg.value * rate); // 1 ETH = rate *  SPT
         HistoryTransaction memory historyTransactionOfCharge = HistoryTransaction(_historyTransactionId.current(),"SPT","charge",address(this),block.timestamp);
         members[msg.sender].historyTransaction.push(historyTransactionOfCharge);
