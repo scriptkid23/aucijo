@@ -16,6 +16,8 @@ const WrapperDrizzleComponent = (OriginalComponent) => {
           spimarketAddress = {this.context.contracts.SpiMarket.address}
           aucijoAddress = {this.context.contracts.Aucijo.address}
           context={this.context}
+          contracts= {this.context.contracts}
+          spiMarketAddress = {this.context.contracts?.SpiMarket.address}
           events = {this.context.contracts.Aucijo.events}
           eventsMarket = {this.context.contracts.SpiMarket.events}
           owner={localStorage.getItem("address")}
