@@ -14,10 +14,11 @@ import { useForm } from "react-hook-form";
 import { GAS } from "../helper/constant";
 import { convertToDecimal } from "../helper/utils";
 import Spinner from "./spinner";
-
+import moment from 'moment'
 export default function CreateAuctionComponent({ data, methods, owner, methodsMarket, aucijoAddress, setAlert}) {
   const [modal, setModal] = useState(false);
-  const [startTime, setStartTime] = useState(null);
+  const minutesToAdd = 3;
+  const [startTime, setStartTime] = useState(new Date((new Date()).getTime() + minutesToAdd*60000));
   const [endTime, setEndTime] = useState(null);
   const [item, setItem] = useState(null);
   const [content, setContent] = useState("");
@@ -43,7 +44,7 @@ export default function CreateAuctionComponent({ data, methods, owner, methodsMa
             value.description,
             coin,
             decimal,
-            startTime.unix(),
+            moment(startTime).unix(),
             endTime.unix()
           )
           .send({
@@ -113,13 +114,13 @@ export default function CreateAuctionComponent({ data, methods, owner, methodsMa
               <Col>
                 <FormGroup>
                   <label className="text-secondary">Start time</label>
-                  <Datetime onChange={setStartTime} />
+                  <Datetime onChange={setStartTime} value={startTime}/>
                 </FormGroup>
               </Col>
               <Col>
                 <FormGroup>
                   <label className="text-secondary">End time</label>
-                  <Datetime onChange={setEndTime} />
+                  <Datetime onChange={setEndTime} value={endTime}/>
                 </FormGroup>
               </Col>
             </Row>
