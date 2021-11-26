@@ -10,7 +10,7 @@ import WrapperAlertComponent from "../components/wrapper-alert.component";
 import WrapperDrizzleComponent from "../components/wrapper-drizzle.component";
 import CustomHook from "../helper/hook";
 import _ from 'lodash';
-import { convertSPT } from "../helper/utils";
+import { convertSPT, parseContent } from "../helper/utils";
 
 function AuctionDetail({ methods, owner, auction, events, setAlert }) {
   const history = useHistory();
@@ -49,7 +49,6 @@ function AuctionDetail({ methods, owner, auction, events, setAlert }) {
       }
     );
   }, []);
-
   return (
     <div className="content">
       <div className="mb-3">
@@ -81,6 +80,9 @@ function AuctionDetail({ methods, owner, auction, events, setAlert }) {
                   <p className="description">{item && _.capitalize(item.name)}</p>
                 </div>
                 <div className="card-description text-center">
+                  {item && parseContent(item?.content)}
+                </div>
+                <div className="card-description text-center mt-0">
                   {auction.description}
                 </div>
               </CardBody>

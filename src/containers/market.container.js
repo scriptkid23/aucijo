@@ -23,9 +23,7 @@ function MarketContainer({ methods, methodsMarket, eventsMarket, setAlert, owner
             eventsMarket.AwardRecipient({ filter: { recipient: owner } },
                 (err, event) => {
                     if (!err) {
-                        setAlert(
-                            "success", "congratulations️ 🎉 you already own token with id: " +
-                        event.returnValues.tokenId);
+                        setAlert("success", "congratulations️ 🎉 you already own token with id: " + event.returnValues.tokenId);
                         setTurn(true);
                     }
                     else {
