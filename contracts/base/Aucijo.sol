@@ -4,6 +4,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
+import "@openzeppelin/contracts/utils/introspection/IERC165.sol";
 import {ArrayLib} from "./Utils.sol";
 
 import "./Schemas.sol";
@@ -15,6 +16,8 @@ import "./Schemas.sol";
 contract Aucijo is ERC20, IERC721Receiver {
     address         private StoreToken;
     uint256         private rate;
+    ///  Note: the ERC-165 identifier for this interface is 0x80ac58cd.
+    bytes4 constant ERC721InterfaceID = 0x80ac58cd;
     constructor() ERC20("Spirity Token", "SPT") {
         _mint(address(this), 0);
         StoreToken  = address(this);
@@ -81,9 +84,9 @@ contract Aucijo is ERC20, IERC721Receiver {
         }
      */
     function addItem(uint256 _tokenId, address _NFTStoreAddress) public mRegistered{
+        require(IERC165(_NFTStoreAddress).supportsInterface(ERC721InterfaceID),"Contract not support token ERC721");
         require(IERC721Metadata(_NFTStoreAddress).ownerOf(_tokenId) == msg.sender,"You don't own this item!");
         require(!wasAddItem[_NFTStoreAddress][_tokenId],"You was add token!");
-
         Item storage item               = items[_itemId.current()];
         item.content                    = IERC721Metadata(_NFTStoreAddress).tokenURI(_tokenId);
         item.owner                      = msg.sender;
