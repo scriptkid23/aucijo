@@ -84,7 +84,7 @@ contract Aucijo is ERC20, IERC721Receiver, ReentrancyGuard {
             address: address of market
         }
      */
-    function addItem(uint256 _tokenId, address _NFTStoreAddress) public mRegistered{
+    function addItem(uint256 _tokenId, address _NFTStoreAddress) public nonReentrant mRegistered{
         require(IERC165(_NFTStoreAddress).supportsInterface(ERC721InterfaceID),"Contract not support token ERC721");
         require(IERC721Metadata(_NFTStoreAddress).ownerOf(_tokenId) == msg.sender,"You don't own this item!");
         require(!wasAddItem[_NFTStoreAddress][_tokenId],"You was add token!");
@@ -102,7 +102,7 @@ contract Aucijo is ERC20, IERC721Receiver, ReentrancyGuard {
         emit AddItem(msg.sender, item.id, item.content);
     }
 
-    function agree(uint id) public mRegistered{
+    function agree(uint id) public nonReentrant mRegistered{
         require(auctions[id].owner == msg.sender, 'not permission!'); // yêu cầu phải là chủ sở hữu mới được thực thi
         require(auctions[id].start_time <= block.timestamp && auctions[id].end_time >= block.timestamp, 'Outides of auction time');
         require(auctions[id].status == AuctionStatus.START,'Auction was closed');
@@ -126,7 +126,7 @@ contract Aucijo is ERC20, IERC721Receiver, ReentrancyGuard {
         IERC721Metadata(items[auctions[id].itemId].factory).safeTransferFrom(address(this), auctions[id].currentKing, items[auctions[id].itemId].tokenId);
         
     } 
-    function revokeAuction(uint id) public mRegistered{
+    function revokeAuction(uint id) public nonReentrant mRegistered{
         require(auctions[id].owner == msg.sender, 'not permission!');
         require(auctions[id].start_time <= block.timestamp && auctions[id].end_time >= block.timestamp, 'Outides of auction time');
         require(auctions[id].status == AuctionStatus.START,'Auction was closed');
@@ -146,7 +146,7 @@ contract Aucijo is ERC20, IERC721Receiver, ReentrancyGuard {
     }
     // function revokeToken trong tường hợp người tạo hợp đồng không agree nhưng đã quá hạn đấu giá, người đấu giá cao nhất có  quyề n 
     // thu hồi token
-    function revokeToken(uint id) public mRegistered {
+    function revokeToken(uint id) public nonReentrant mRegistered {
         require(auctions[id].owner != msg.sender,'You is owner');
         require(auctions[id].currentKing == msg.sender,'You not king');
         require(auctions[id].end_time < block.timestamp,'You not permission');
@@ -154,7 +154,7 @@ contract Aucijo is ERC20, IERC721Receiver, ReentrancyGuard {
         _transfer(StoreToken, msg.sender, auctions[id].price);
         auctions[id].status = AuctionStatus.CLOSED;
     }
-    function createAuction(string memory name,uint itemId,  string memory description, uint price, uint decimal, uint start_time, uint end_time) public mRegistered{
+    function createAuction(string memory name,uint itemId,  string memory description, uint price, uint decimal, uint start_time, uint end_time) public nonReentrant mRegistered{
         require(keccak256(abi.encodePacked((name))) > 0 && start_time >= block.timestamp && end_time > start_time,'Outside of auction time');
         require(itemExist[itemId],'Item not Exist');
         require(!itemIsAuction[itemId],'Item was auction!');
@@ -186,7 +186,7 @@ contract Aucijo is ERC20, IERC721Receiver, ReentrancyGuard {
         @param price   value was process from client
         @param decimal number decimal in price
      */
-    function bid(uint id, uint price, uint decimal) public mRegistered{
+    function bid(uint id, uint price, uint decimal) public nonReentrant mRegistered{
         price = price * (10 ** (18 - decimal));
         require(auctions[id].status != AuctionStatus.CLOSED,'auction was closed');
         require(auctions[id].start_time <= block.timestamp && auctions[id].end_time >= block.timestamp, 'Outside of auction time');
@@ -203,7 +203,7 @@ contract Aucijo is ERC20, IERC721Receiver, ReentrancyGuard {
     function getCurrentTime() public view mRegistered returns(uint){
         return block.timestamp;
     }
-    function coinCharge() public payable mRegistered{
+    function coinCharge() public payable nonReentrant mRegistered{
         (bool sent,) = address(this).call{value: msg.value}("");
         require(sent, "Failed to send Ether");
         _mint(msg.sender, msg.value * rate); // 1 ETH = rate *  SPT
