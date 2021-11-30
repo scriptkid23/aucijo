@@ -5,6 +5,7 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 import "@openzeppelin/contracts/utils/introspection/IERC165.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import {ArrayLib} from "./Utils.sol";
 
 import "./Schemas.sol";
@@ -13,7 +14,7 @@ import "./Schemas.sol";
     (or any contract using ERC721) to the contract address "Aucijo"
     then Aucijo must implement interface IERC721Receiver
  */
-contract Aucijo is ERC20, IERC721Receiver {
+contract Aucijo is ERC20, IERC721Receiver, ReentrancyGuard {
     address         private StoreToken;
     uint256         private rate;
     ///  Note: the ERC-165 identifier for this interface is 0x80ac58cd.
@@ -210,7 +211,7 @@ contract Aucijo is ERC20, IERC721Receiver {
         members[msg.sender].historyTransaction.push(historyTransactionOfCharge);
         emit CoinCharge(msg.sender, balanceOf(msg.sender));
     }
-    function withdrawal(uint256 value, uint256 decimal) public payable mRegistered {
+    function withdrawal(uint256 value, uint256 decimal) public payable nonReentrant mRegistered {
         uint256 coin = value * (10 ** (18 - decimal));
         require(balanceOf(msg.sender) >= coin,'amount of tokens exceeded');
         (bool sent,) = address(msg.sender).call{value:coin / rate}("");
