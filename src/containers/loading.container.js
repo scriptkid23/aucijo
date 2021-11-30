@@ -21,23 +21,7 @@ const LoadingContainer = ({ web3, accounts, initialized, children }) => {
       );
     }
 
-    if (web3.status === "initialized" && Object.keys(accounts).length === 0) {
-      return (
-        <main className="container loading-screen">
-          <div className="pure-g">
-            <div className="pure-u-1-1">
-              <h1>🦊</h1>
-              <h3>
-                <strong>{"We can't find any Ethereum accounts!"}</strong>
-                Please check and make sure Metamask or your browser Ethereum
-                wallet is pointed at the correct network and your account is
-                unlocked.
-              </h3>
-            </div>
-          </div>
-        </main>
-      );
-    }
+   
 
     if (web3.status === "initialized") {
       return children;
