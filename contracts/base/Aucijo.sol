@@ -17,12 +17,14 @@ import "./Schemas.sol";
 contract Aucijo is ERC20, IERC721Receiver, ReentrancyGuard {
     address         private StoreToken;
     uint256         private rate;
+    uint8           public  minBidIncrementPercentage;
     ///  Note: the ERC-165 identifier for this interface is 0x80ac58cd.
     bytes4 constant ERC721InterfaceID = 0x80ac58cd;
     constructor() ERC20("Spirity Token", "SPT") {
         _mint(address(this), 0);
         StoreToken  = address(this);
         rate        = 1000;
+        minBidIncrementPercentage = 10; // 10%
     }
     // address deploy smart contract and hold token in auction
 
@@ -191,7 +193,7 @@ contract Aucijo is ERC20, IERC721Receiver, ReentrancyGuard {
         require(auctions[id].status != AuctionStatus.CLOSED,'auction was closed');
         require(auctions[id].start_time <= block.timestamp && auctions[id].end_time >= block.timestamp, 'Outside of auction time');
         require(auctions[id].owner != msg.sender,'You are the owner');
-        require(auctions[id].price < price && balanceOf(msg.sender) > price, 'You are not enought SPT');
+        require(auctions[id].price + (auctions[id].price * minBidIncrementPercentage / 100) < price && balanceOf(msg.sender) > price, 'You are not enought SPT');
         if(auctions[id].owner != auctions[id].currentKing) {
             _transfer(StoreToken, auctions[id].currentKing, auctions[id].price);
         }
