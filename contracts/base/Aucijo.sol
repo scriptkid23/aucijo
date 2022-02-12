@@ -194,9 +194,12 @@ contract Aucijo is ERC20, IERC721Receiver, ReentrancyGuard {
         require(auctions[id].start_time <= block.timestamp && auctions[id].end_time >= block.timestamp, 'Outside of auction time');
         require(auctions[id].owner != msg.sender,'You are the owner');
         require(auctions[id].price + (auctions[id].price * minBidIncrementPercentage / 100) < price && balanceOf(msg.sender) > price, 'You are not enought SPT');
+
+        // token will refund for old current king
         if(auctions[id].owner != auctions[id].currentKing) {
             _transfer(StoreToken, auctions[id].currentKing, auctions[id].price);
         }
+
         auctions[id].price = price;
         auctions[id].currentKing = msg.sender;
         transfer(StoreToken, price);
