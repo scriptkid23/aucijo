@@ -17,6 +17,7 @@ import "./Schemas.sol";
 contract Aucijo is ERC20, IERC721Receiver, ReentrancyGuard {
     address         private StoreToken;
     uint256         private rate;
+    uint8           private delay = 100;
     uint8           public  minBidIncrementPercentage;
     ///  Note: the ERC-165 identifier for this interface is 0x80ac58cd.
     bytes4 constant ERC721InterfaceID = 0x80ac58cd;
@@ -98,7 +99,7 @@ contract Aucijo is ERC20, IERC721Receiver, ReentrancyGuard {
         item.factory                    = _NFTStoreAddress;
         itemExist[_itemId.current()]   = true;
         members[msg.sender].items.push(item);
-        
+        //TODO: when add item you should transfer NFT for system
         wasAddItem[_NFTStoreAddress][_tokenId] = true;
         _itemId.increment();
         emit AddItem(msg.sender, item.id, item.content);
@@ -156,12 +157,11 @@ contract Aucijo is ERC20, IERC721Receiver, ReentrancyGuard {
         _transfer(StoreToken, msg.sender, auctions[id].price);
         auctions[id].status = AuctionStatus.CLOSED;
     }
-    function createAuction(string memory name,uint itemId,  string memory description, uint price, uint decimal, uint start_time, uint end_time) public nonReentrant mRegistered{
-        require(keccak256(abi.encodePacked((name))) > 0 && start_time >= block.timestamp && end_time > start_time,'Outside of auction time');
+    function createAuction(string memory name,uint itemId,  string memory description, uint price, uint start_time, uint end_time) public nonReentrant mRegistered{
+        require(keccak256(abi.encodePacked((name))) > 0 && start_time + delay >= block.timestamp && end_time > start_time,'Outside of auction time');
         require(itemExist[itemId],'Item not Exist');
         require(!itemIsAuction[itemId],'Item was auction!');
         itemIsAuction[itemId] = true;
-        price = price * (10 ** (18 - decimal));
         Auction memory auction = Auction(_auctionId.current(), name, itemId, description, price, start_time, end_time, AuctionStatus.START, msg.sender, msg.sender);
         auctions.push(auction);
         emit AddAuction(_auctionId.current(), name, itemId, description, price, AuctionStatus.START, start_time, end_time);
@@ -184,12 +184,8 @@ contract Aucijo is ERC20, IERC721Receiver, ReentrancyGuard {
     // }
     // đấu giá chỉ được thực hiện khi trong thời gian start và end 
     // khi người dùng đấu giá, sẽ có một StoreToken giữ số tiền người đấu giá
-    /**
-        @param price   value was process from client
-        @param decimal number decimal in price
-     */
-    function bid(uint id, uint price, uint decimal) public nonReentrant mRegistered{
-        price = price * (10 ** (18 - decimal));
+
+    function bid(uint id, uint price) public nonReentrant mRegistered{
         require(auctions[id].status != AuctionStatus.CLOSED,'auction was closed');
         require(auctions[id].start_time <= block.timestamp && auctions[id].end_time >= block.timestamp, 'Outside of auction time');
         require(auctions[id].owner != msg.sender,'You are the owner');
@@ -216,12 +212,11 @@ contract Aucijo is ERC20, IERC721Receiver, ReentrancyGuard {
         members[msg.sender].historyTransaction.push(historyTransactionOfCharge);
         emit CoinCharge(msg.sender, balanceOf(msg.sender));
     }
-    function withdrawal(uint256 value, uint256 decimal) public payable nonReentrant mRegistered {
-        uint256 coin = value * (10 ** (18 - decimal));
-        require(balanceOf(msg.sender) >= coin,'amount of tokens exceeded');
-        (bool sent,) = address(msg.sender).call{value:coin / rate}("");
+    function withdrawal(uint256 value) public payable nonReentrant mRegistered {
+        require(balanceOf(msg.sender) >= value,'amount of tokens exceeded');
+        (bool sent,) = address(msg.sender).call{value:value / rate}("");
         require(sent, "Failed to withdrawal Ether");
-        transfer(StoreToken, coin);
+        transfer(StoreToken, value);
         HistoryTransaction memory historyTransactionOfWithdrawal = HistoryTransaction(_historyTransactionId.current(),"SPT","withdrawal",address(this),block.timestamp);
         members[msg.sender].historyTransaction.push(historyTransactionOfWithdrawal);
         emit Withdrawal(msg.sender, balanceOf(msg.sender));
