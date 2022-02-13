@@ -10,40 +10,57 @@ import {
   Row,
 } from "reactstrap";
 import Datetime from "react-datetime";
-import { useForm } from "react-hook-form";
 import { GAS } from "../helper/constant";
-import { convertToDecimal } from "../helper/utils";
 import Spinner from "./spinner";
-import moment from 'moment'
-export default function CreateAuctionComponent({ data, methods, owner, methodsMarket, aucijoAddress, setAlert}) {
+import { ethers } from "ethers";
+import moment from "moment";
+export default function CreateAuctionComponent({
+  data,
+  methods,
+  owner,
+  methodsMarket,
+  aucijoAddress,
+  setAlert,
+}) {
   const [modal, setModal] = useState(false);
   const minutesToAdd = 3;
-  const [startTime, setStartTime] = useState(new Date((new Date()).getTime() + minutesToAdd*60000));
+  const [startTime, setStartTime] = useState(
+    new Date(new Date().getTime() + minutesToAdd * 60000)
+  );
   const [endTime, setEndTime] = useState(null);
   const [item, setItem] = useState(null);
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
+  const [payload, setPayload] = useState({
+    price: '',
+    description: '', 
+  })
   const toggle = () => {
     setModal(!modal);
     getItemInformation();
   };
   const getItemInformation = async () => {
-    const _data = await methods.findItemById(data.id).call({from:owner});
+    const _data = await methods.findItemById(data.id).call({ from: owner });
     setItem(_data);
     setContent(JSON.parse(_data.content));
+  };
+  const setValue = (e) => {
+    setPayload({
+      ...payload,
+      [e.target.name]: e.target.value,
+
+    })
   }
-  const { register, handleSubmit } = useForm();
-  const onSubmit = async (value) => {
+  const onSubmit = async () => {
     setLoading(true);
     if (startTime && endTime) {
-      const {coin, decimal} = convertToDecimal(value.price);
       try {
-        await methods.createAuction(
+        await methods
+          .createAuction(
             content?.name,
             parseInt(data.id),
-            value.description,
-            coin,
-            decimal,
+            payload.description,
+            ethers.utils.parseEther(payload && payload.price.toString()),
             moment(startTime).unix(),
             endTime.unix()
           )
@@ -51,17 +68,16 @@ export default function CreateAuctionComponent({ data, methods, owner, methodsMa
             from: owner,
             gas: GAS,
           });
-        await methodsMarket.safeTransferFrom(
-          owner, 
-          aucijoAddress, 
-          item.tokenId).send({
-          from: owner,
-          gas: GAS,
-        })
+        await methodsMarket
+          .safeTransferFrom(owner, aucijoAddress, item.tokenId)
+          .send({
+            from: owner,
+            gas: GAS,
+          });
         toggle();
         setLoading(false);
       } catch (error) {
-        setAlert("danger",error.message);
+        setAlert("danger", error.message);
         setLoading(false);
       }
     }
@@ -75,7 +91,7 @@ export default function CreateAuctionComponent({ data, methods, owner, methodsMa
         toggle={toggle}
       >
         <ModalBody>
-          <Form onSubmit={handleSubmit(onSubmit)}>
+          <Form>
             <Row>
               <Col>
                 <FormGroup>
@@ -105,7 +121,8 @@ export default function CreateAuctionComponent({ data, methods, owner, methodsMa
                   <Input
                     className="text-white"
                     placeholder="Type start price (SPT)"
-                    {...register("price", { required: true })}
+                    name="price"
+                    onChange= {(e) => setValue(e)}
                   />
                 </FormGroup>
               </Col>
@@ -114,13 +131,13 @@ export default function CreateAuctionComponent({ data, methods, owner, methodsMa
               <Col>
                 <FormGroup>
                   <label className="text-secondary">Start time</label>
-                  <Datetime onChange={setStartTime} value={startTime}/>
+                  <Datetime onChange={setStartTime} value={startTime} />
                 </FormGroup>
               </Col>
               <Col>
                 <FormGroup>
                   <label className="text-secondary">End time</label>
-                  <Datetime onChange={setEndTime} value={endTime}/>
+                  <Datetime onChange={setEndTime} value={endTime} />
                 </FormGroup>
               </Col>
             </Row>
@@ -131,15 +148,16 @@ export default function CreateAuctionComponent({ data, methods, owner, methodsMa
                   <Input
                     className="text-white"
                     placeholder="Description"
-                    {...register("description", { required: true })}
+                    name="description"
+                    onChange= {(e) => setValue(e)}
                   />
                 </FormGroup>
               </Col>
             </Row>
             <Row>
               <Col>
-                <Button color="primary" disabled={loading}>
-                  {loading ? <Spinner loading={true}/>:"Create"}
+                <Button color="primary" disabled={loading} onClick={() => onSubmit()}>
+                  {loading ? <Spinner loading={true} /> : "Create"}
                 </Button>
               </Col>
             </Row>

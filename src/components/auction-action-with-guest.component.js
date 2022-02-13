@@ -8,6 +8,7 @@ import {
   Input,
   Form,
 } from "reactstrap";
+import { ethers } from 'ethers'
 import { GAS } from "../helper/constant";
 import { convertToDecimal } from "../helper/utils";
 export default function AuctionActionWithGuest({
@@ -17,14 +18,14 @@ export default function AuctionActionWithGuest({
   owner,
   setAlert,
 }) {
-  const bid = async (data) => {
+  const [price, setPrice] = React.useState('');
+  const bid = async () => {
     try {
-      const {coin, decimal} = convertToDecimal(data.price);
-      await methods.bid(parseInt(itemId), coin, decimal).send({
+      await methods.bid(parseInt(itemId), ethers.utils.parseEther(price)).send({
         from: owner,
         gas: GAS,
       });
-      setAlert('success','You bid: '+data.price+' SPT');
+      setAlert('success','You bid: '+price+' SPT');
     } catch (error) {
       setAlert("danger", error.message);
     }
@@ -40,20 +41,19 @@ export default function AuctionActionWithGuest({
          setAlert("danger",error.message)
      }
   }
-  const { register, handleSubmit } = useForm();
+
   return (
     <CardFooter>
       <div className="button-container">
         {parseInt(auction.end_time) >= moment().unix() && (
           <Form
             className="d-flex align-items-center"
-            onSubmit={handleSubmit(bid)}
           >
             <Input
               placeholder="Type the number of SPT"
-              {...register("price", { required: true })}
+              onChange={e => setPrice(e.target.value)}
             />
-            <Button className="btn-icon" color="success" id="tooltip-bid">
+            <Button className="btn-icon" color="success" id="tooltip-bid" onClick={() => bid()}>
               <i className="far fa-hand-paper"></i>
             </Button>
             <UncontrolledTooltip

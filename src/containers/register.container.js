@@ -10,22 +10,39 @@ import {
   Form,
   Alert,
 } from "reactstrap";
-import { useForm } from "react-hook-form";
 import { GAS } from "../helper/constant";
 import WrapperDrizzleComponent from "../components/wrapper-drizzle.component";
 import { useHistory } from "react-router-dom";
 import { compose } from "redux";
 import WrapperAlertComponent from "../components/wrapper-alert.component";
-
+import {isEmail, isEmpty} from '../helper/utils'
 function RegisterContainer({ methods, owner, setAlert }) {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  const [data, setData] = React.useState({
+    first_name: "",
+    last_name: "",
+    email: "",
+    address: "",
+    phone_number: "",
+  });
+  const handleSetData = (e) => {
+    setData({
+      ...data,
+      [e.target.name]: e.target.value,
+    });
+  };
   const history = useHistory();
-  const onSubmit = async (data) => {
+  
+  const validatorData = () => {
+    if(isEmpty(data.first_name) || isEmpty(data.last_name) || isEmpty(data.email) ||isEmpty(data.address) || isEmpty(data.phone_number)){
+      throw {message: 'Data not empty'}
+    }
+    if(!isEmail(data.email)){
+      throw {message: 'The email address format is not valid'}
+    }
+  }
+  const onSubmit = async () => {
     try {
+      validatorData();
       await methods
         .registerMember(
           data.first_name,
@@ -50,7 +67,7 @@ function RegisterContainer({ methods, owner, setAlert }) {
           <div className="navbar-translate">
             <a
               className="navbar-brand"
-            href="https://google.com"
+              href="https://google.com"
               rel="tooltip"
               title="Designed and Coded by Creative Tim"
               data-placement="bottom"
@@ -79,14 +96,15 @@ function RegisterContainer({ methods, owner, setAlert }) {
                     owner before using service.
                   </Alert>
                   <div className="container">
-                    <Form onSubmit={handleSubmit(onSubmit)}>
+                    <Form>
                       <Row>
                         <Col md={6}>
                           <FormGroup>
                             <label>First name</label>
                             <Input
                               placeholder="Type your first name"
-                              {...register("first_name", { required: true })}
+                              name="first_name"
+                              onChange={(e) => handleSetData(e)}
                             />
                           </FormGroup>
                         </Col>
@@ -95,7 +113,8 @@ function RegisterContainer({ methods, owner, setAlert }) {
                             <label>Last name</label>
                             <Input
                               placeholder="Type your last name"
-                              {...register("last_name", { required: true })}
+                              name="last_name"
+                              onChange={(e) => handleSetData(e)}
                             />
                           </FormGroup>
                         </Col>
@@ -106,10 +125,8 @@ function RegisterContainer({ methods, owner, setAlert }) {
                             <label>Email</label>
                             <Input
                               placeholder="your@gmail.com"
-                              {...register("email", {
-                                required: true,
-                                pattern: /\S+@\S+\.\S+/,
-                              })}
+                              name="email"
+                              onChange={(e) => handleSetData(e)}
                             />
                           </FormGroup>
                         </Col>
@@ -120,7 +137,8 @@ function RegisterContainer({ methods, owner, setAlert }) {
                             <label>Address</label>
                             <Input
                               placeholder="3973 Drainer Avenue, Tallahassee, Florida"
-                              {...register("address", { required: true })}
+                              name="address"
+                              onChange={(e) => handleSetData(e)}
                             />
                           </FormGroup>
                         </Col>
@@ -132,22 +150,13 @@ function RegisterContainer({ methods, owner, setAlert }) {
                             <Input
                               placeholder="0975164536"
                               type="tel"
-                              {...register("phone_number", {
-                                required: true,
-                                pattern: /^\d+$/,
-                              })}
+                              name="phone_number"
+                              onChange={(e) => handleSetData(e)}
                             />
                           </FormGroup>
                         </Col>
                       </Row>
-                      <Button
-                        color="primary"
-                        disabled={
-                          Object.keys(errors).length !== 0 ? true : false
-                        }
-                      >
-                        Submit
-                      </Button>
+                      <Button color="primary" onClick={() => onSubmit()}>Submit</Button>
                     </Form>
                   </div>
                 </CardBody>

@@ -4,6 +4,7 @@ import WrapperDrizzleComponent from "./wrapper-drizzle.component";
 import { GAS } from "../helper/constant";
 import CustomHook from "../helper/hook";
 import { compose } from "redux";
+import { ethers } from 'ethers'
 import WrapperAlertComponent from "./wrapper-alert.component";
 import { connect } from "react-redux";
 function CoinRechargeComponent({ methods, owner, member }) {
@@ -16,7 +17,7 @@ function CoinRechargeComponent({ methods, owner, member }) {
         await methods.coinCharge().send({
           from: owner,
           gas: GAS,
-          value: coin * Math.pow(10,18),
+          value: ethers.utils.parseEther(coin.toString()),
         });
         setModal(false);
       } catch (error) {
