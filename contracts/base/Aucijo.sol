@@ -204,7 +204,7 @@ contract Aucijo is ERC20, IERC721Receiver, ReentrancyGuard {
     function getCurrentTime() public view mRegistered returns(uint){
         return block.timestamp;
     }
-    function coinCharge() public payable nonReentrant mRegistered{
+    function deposit() public payable nonReentrant mRegistered{
         (bool sent,) = address(this).call{value: msg.value}("");
         require(sent, "Failed to send Ether");
         _mint(msg.sender, msg.value * rate); // 1 ETH = rate *  SPT
