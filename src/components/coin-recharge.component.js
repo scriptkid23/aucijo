@@ -14,7 +14,7 @@ function CoinRechargeComponent({ methods, owner, member }) {
   const onCoinRecharge = async (data) => {
     if(coin != 0){
       try {
-        await methods.coinCharge().send({
+        await methods.deposit().send({
           from: owner,
           gas: GAS,
           value: ethers.utils.parseEther(coin.toString()),
@@ -29,7 +29,7 @@ function CoinRechargeComponent({ methods, owner, member }) {
   return (
     <React.Fragment>
       <span className="text-info pointer" onClick={toggle}>
-        Coin recharge
+        Deposit
       </span>
       <Modal isOpen={modal} toggle={toggle} modalClassName="modal-create-auction">
         <ModalBody>
@@ -41,7 +41,7 @@ function CoinRechargeComponent({ methods, owner, member }) {
               </InputGroup>     
             </FormGroup>
             <Button color="primary" type="button" onClick={onCoinRecharge}>
-              Charge
+              Deposit
             </Button>
           </Form>
         </ModalBody>
