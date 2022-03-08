@@ -131,7 +131,6 @@ contract Aucijo is ERC20, IERC721Receiver, ReentrancyGuard {
     } 
     function revokeAuction(uint id) public nonReentrant mRegistered{
         require(auctions[id].owner == msg.sender, 'not permission!');
-        require(auctions[id].start_time <= block.timestamp && auctions[id].end_time >= block.timestamp, 'Outides of auction time');
         require(auctions[id].status == AuctionStatus.START,'Auction was closed');
         if(auctions[id].currentKing != msg.sender){
             _transfer(StoreToken, auctions[id].currentKing, auctions[id].price);
